@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- SEO 基础 -->
-    <title>数字华容道 - 经典益智拼图游戏</title>
-    <meta name="description" content="免费在线玩数字华容道，经典益智拼图游戏。支持入门、初级、中级、高级难度，挑战你的逻辑思维能力！">
-    <meta name="keywords" content="数字华容道,华容道,拼图游戏,益智游戏,逻辑思维,滑动拼图,在线游戏,Klotski,15 puzzle">
+    <!-- SEO 基础：默认中文，I18N 会根据语言动态更新 -->
+    <title id="seoTitle">数字华容道在线玩 - 经典益智数字拼图游戏</title>
+    <meta id="seoDescription" name="description" content="免费在线玩数字华容道小游戏！提供入门3x3、初级4x4、中级7x7、高级10x10等多种难度模式，锻炼逻辑思维与大脑反应速度。无需下载，点击即玩。">
+    <meta id="seoKeywords" name="keywords" content="数字华容道,华容道在线玩,数字拼图,益智游戏,逻辑思维,滑动拼图,在线游戏,Klotski,15 puzzle,华容道技巧">
     <meta name="robots" content="index, follow">
     <meta name="author" content="xxcxy-max">
     <meta name="theme-color" content="#f5e0b8">
-    <link rel="canonical" href="https://games.leonova.xyz/">
+    <link id="canonicalLink" rel="canonical" href="https://games.leonova.xyz/">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="background.jpg">
@@ -19,46 +19,46 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://games.leonova.xyz/">
-    <meta property="og:title" content="数字华容道 - 经典益智拼图游戏">
-    <meta property="og:description" content="免费在线玩数字华容道，经典益智拼图游戏。支持多种难度，挑战你的逻辑思维！">
+    <meta id="ogUrl" property="og:url" content="https://games.leonova.xyz/">
+    <meta id="ogTitle" property="og:title" content="数字华容道在线玩 - 经典益智数字拼图游戏">
+    <meta id="ogDescription" property="og:description" content="免费在线玩数字华容道小游戏！提供多种难度模式，锻炼逻辑思维与大脑反应速度。无需下载，点击即玩。">
     <meta property="og:image" content="https://games.leonova.xyz/background.jpg">
-    <meta property="og:locale" content="zh_CN">
+    <meta id="ogLocale" property="og:locale" content="zh_CN">
     <meta property="og:site_name" content="数字华容道">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://games.leonova.xyz/">
-    <meta name="twitter:title" content="数字华容道 - 经典益智拼图游戏">
-    <meta name="twitter:description" content="免费在线玩数字华容道，经典益智拼图游戏。支持多种难度，挑战你的逻辑思维！">
+    <meta id="twitterUrl" name="twitter:url" content="https://games.leonova.xyz/">
+    <meta id="twitterTitle" name="twitter:title" content="数字华容道在线玩 - 经典益智数字拼图游戏">
+    <meta id="twitterDescription" name="twitter:description" content="免费在线玩数字华容道小游戏！提供多种难度模式，锻炼逻辑思维与大脑反应速度。无需下载，点击即玩。">
     <meta name="twitter:image" content="https://games.leonova.xyz/background.jpg">
 
-    <!-- 多语言 hreflang -->
-    <link rel="alternate" hreflang="zh-CN" href="https://games.leonova.xyz/">
-    <link rel="alternate" hreflang="zh-TW" href="https://games.leonova.xyz/">
-    <link rel="alternate" hreflang="en" href="https://games.leonova.xyz/">
-    <link rel="alternate" hreflang="ja" href="https://games.leonova.xyz/">
-    <link rel="alternate" hreflang="vi" href="https://games.leonova.xyz/">
-    <link rel="alternate" hreflang="fr" href="https://games.leonova.xyz/">
-    <link rel="alternate" hreflang="de" href="https://games.leonova.xyz/">
-    <link rel="alternate" hreflang="es" href="https://games.leonova.xyz/">
-    <link rel="alternate" hreflang="ko" href="https://games.leonova.xyz/">
+    <!-- 多语言 hreflang（带 ?lang= 参数） -->
+    <link rel="alternate" hreflang="zh-CN" href="https://games.leonova.xyz/?lang=zh-CN">
+    <link rel="alternate" hreflang="zh-TW" href="https://games.leonova.xyz/?lang=zh-TW">
+    <link rel="alternate" hreflang="en" href="https://games.leonova.xyz/?lang=en">
+    <link rel="alternate" hreflang="ja" href="https://games.leonova.xyz/?lang=ja">
+    <link rel="alternate" hreflang="vi" href="https://games.leonova.xyz/?lang=vi">
+    <link rel="alternate" hreflang="fr" href="https://games.leonova.xyz/?lang=fr">
+    <link rel="alternate" hreflang="de" href="https://games.leonova.xyz/?lang=de">
+    <link rel="alternate" hreflang="es" href="https://games.leonova.xyz/?lang=es">
+    <link rel="alternate" hreflang="ko" href="https://games.leonova.xyz/?lang=ko">
     <link rel="alternate" hreflang="x-default" href="https://games.leonova.xyz/">
 
     <!-- JSON-LD 结构化数据 -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "VideoGame",
+        "@type": ["VideoGame", "WebApplication"],
         "name": "数字华容道",
-        "description": "免费在线玩数字华容道，经典益智拼图游戏。支持入门、初级、中级、高级难度。",
+        "description": "免费在线玩数字华容道，经典益智数字拼图游戏。支持入门、初级、中级、高级多种难度。",
         "url": "https://games.leonova.xyz/",
         "image": "https://games.leonova.xyz/background.jpg",
-        "genre": ["Puzzle", "Logic", "Board Game"],
+        "genre": ["Puzzle", "Logic", "Board Game", "Brain Training"],
         "gamePlatform": "Web Browser",
         "applicationCategory": "Game",
         "operatingSystem": "Any",
-        "inLanguage": ["zh", "en", "ja", "vi", "fr", "de", "es", "ko"],
+        "inLanguage": ["zh-CN", "zh-TW", "en", "ja", "vi", "fr", "de", "es", "ko"],
         "offers": {
             "@type": "Offer",
             "price": "0",
@@ -105,6 +105,14 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-size: inherit;
+            font-weight: inherit;
+            line-height: inherit;
         }
 
         /* 棋盘彩色边框 */
@@ -213,6 +221,15 @@
             background: #e74c3c;
             opacity: 0;
         }
+
+        /* SEO 内容区：默认隐藏，仅对搜索引擎可见 */
+        .seo-content {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bg-amber-100">
@@ -260,7 +277,7 @@
                         <circle cx="50" cy="72" r="5" fill="#fff" />
                     </svg>
 
-                    <div class="text-xl md:text-3xl lg:text-4xl font-black text-orange-700 tracking-wide" style="text-shadow: 2px 2px 0 #fff, -1px -1px 0 #fff, 0 2px 8px rgba(255,140,0,0.4);" data-i18n="title">数字华容道</div>
+                    <h1 class="text-xl md:text-3xl lg:text-4xl font-black text-orange-700 tracking-wide" style="text-shadow: 2px 2px 0 #fff, -1px -1px 0 #fff, 0 2px 8px rgba(255,140,0,0.4);" data-i18n="title">数字华容道</h1>
                 </div>
 
                 <!-- 信息栏 -->
@@ -302,6 +319,23 @@
         <div class="message absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30" id="message"></div>
     </div>
 
+    <!-- SEO 内容区：为搜索引擎提供更多文本内容，视觉上隐藏 -->
+    <div class="seo-content" aria-hidden="true">
+        <article>
+            <h2 data-i18n="aboutTitle">什么是数字华容道？</h2>
+            <p data-i18n="aboutText">数字华容道是一款经典的益智数字拼图游戏，源自中国传统民间玩具华容道。玩家需要在带有空白格的棋盘上，通过滑动数字方块，将打乱的数字按从小到大顺序重新排列。游戏简单易懂，却极富挑战性，是锻炼逻辑思维、空间想象力和耐心的绝佳选择。</p>
+
+            <h2 data-i18n="rulesTitle">游戏规则</h2>
+            <p data-i18n="rulesText">棋盘由若干带数字的方块和一个空白格组成。每次只能移动与空白格相邻的数字方块。游戏目标是用最少的步数和时间，把所有数字按 1、2、3……的顺序排列整齐。本站提供入门3x3、初级4x4、中级7x7、高级10x10四种难度，适合不同年龄和水平的玩家挑战。</p>
+
+            <h2 data-i18n="tipsTitle">华容道技巧与解法</h2>
+            <p data-i18n="tipsText">入门玩家建议先完成第一行或第一列，再逐步还原剩余部分。高级玩家可以尝试“逐行还原法”或“逐列还原法”。记住，提前规划移动路径、避免无效往返，是减少步数的关键。多练习不同开局，能显著提升逻辑思维能力和大脑反应速度。</p>
+
+            <h2 data-i18n="benefitsTitle">为什么要玩数字华容道？</h2>
+            <p data-i18n="benefitsText">数字华容道不仅能消磨时间，更是锻炼大脑的有效方式。它可以帮助儿童培养数学思维和专注力，帮助成人缓解压力、保持脑力活跃，也适合老年人进行认知训练。无需下载任何应用，打开浏览器即可免费在线游玩。</p>
+        </article>
+    </div>
+
     <!-- 移动音效 -->
     <audio id="moveSound" src="move.mp3" preload="auto"></audio>
 
@@ -321,12 +355,22 @@
                 hard: '高级',
                 restart: '重新开始',
                 showAnswer: '查看答案',
-                testConfetti: '测试撒花',
                 tip: '提示：点击空白格相邻的数字即可移动',
                 winMessage: '恭喜通关！{moves} 步 / {time}',
                 closeAlert: '这是网页版，关闭功能请在浏览器中操作~',
                 minimizeAlert: '这是网页版，最小化功能请在浏览器中操作~',
-                noteAlert: '玩法：点击空白格相邻的数字，把数字按顺序排列即可通关！'
+                noteAlert: '玩法：点击空白格相邻的数字，把数字按顺序排列即可通关！',
+                seoTitle: '数字华容道在线玩 - 经典益智数字拼图游戏',
+                seoDescription: '免费在线玩数字华容道小游戏！提供入门3x3、初级4x4、中级7x7、高级10x10等多种难度模式，锻炼逻辑思维与大脑反应速度。无需下载，点击即玩。',
+                seoKeywords: '数字华容道,华容道在线玩,数字拼图,益智游戏,逻辑思维,滑动拼图,在线游戏,Klotski,15 puzzle,华容道技巧',
+                aboutTitle: '什么是数字华容道？',
+                aboutText: '数字华容道是一款经典的益智数字拼图游戏，源自中国传统民间玩具华容道。玩家需要在带有空白格的棋盘上，通过滑动数字方块，将打乱的数字按从小到大顺序重新排列。游戏简单易懂，却极富挑战性，是锻炼逻辑思维、空间想象力和耐心的绝佳选择。',
+                rulesTitle: '游戏规则',
+                rulesText: '棋盘由若干带数字的方块和一个空白格组成。每次只能移动与空白格相邻的数字方块。游戏目标是用最少的步数和时间，把所有数字按 1、2、3……的顺序排列整齐。本站提供入门3x3、初级4x4、中级7x7、高级10x10四种难度，适合不同年龄和水平的玩家挑战。',
+                tipsTitle: '华容道技巧与解法',
+                tipsText: '入门玩家建议先完成第一行或第一列，再逐步还原剩余部分。高级玩家可以尝试“逐行还原法”或“逐列还原法”。记住，提前规划移动路径、避免无效往返，是减少步数的关键。多练习不同开局，能显著提升逻辑思维能力和大脑反应速度。',
+                benefitsTitle: '为什么要玩数字华容道？',
+                benefitsText: '数字华容道不仅能消磨时间，更是锻炼大脑的有效方式。它可以帮助儿童培养数学思维和专注力，帮助成人缓解压力、保持脑力活跃，也适合老年人进行认知训练。无需下载任何应用，打开浏览器即可免费在线游玩。'
             },
             'zh-TW': {
                 title: '數字華容道',
@@ -338,12 +382,22 @@
                 hard: '高級',
                 restart: '重新開始',
                 showAnswer: '查看答案',
-                testConfetti: '測試撒花',
                 tip: '提示：點擊空白格相鄰的數字即可移動',
                 winMessage: '恭喜通關！{moves} 步 / {time}',
                 closeAlert: '這是網頁版，關閉功能請在瀏覽器中操作~',
                 minimizeAlert: '這是網頁版，最小化功能請在瀏覽器中操作~',
-                noteAlert: '玩法：點擊空白格相鄰的數字，把數字按順序排列即可通關！'
+                noteAlert: '玩法：點擊空白格相鄰的數字，把數字按順序排列即可通關！',
+                seoTitle: '數字華容道線上玩 - 經典益智數字拼圖遊戲',
+                seoDescription: '免費線上玩數字華容道小遊戲！提供入門3x3、初級4x4、中級7x7、高級10x10等多種難度模式，鍛鍊邏輯思維與大腦反應速度。無需下載，點擊即玩。',
+                seoKeywords: '數字華容道,華容道線上玩,數字拼圖,益智遊戲,邏輯思維,滑動拼圖,線上遊戲,Klotski,15 puzzle,華容道技巧',
+                aboutTitle: '什麼是數字華容道？',
+                aboutText: '數字華容道是一款經典的益智數字拼圖遊戲，源自中國傳統民間玩具華容道。玩家需要在帶有空白格的棋盤上，通過滑動數字方塊，將打亂的數字按從小到大順序重新排列。遊戲簡單易懂，卻極富挑戰性，是鍛鍊邏輯思維、空間想像力和耐心的絕佳選擇。',
+                rulesTitle: '遊戲規則',
+                rulesText: '棋盤由若干帶數字的方塊和一個空白格組成。每次只能移動與空白格相鄰的數字方塊。遊戲目標是用最少的步數和時間，把所有數字按 1、2、3……的順序排列整齊。本站提供入門3x3、初級4x4、中級7x7、高級10x10四種難度，適合不同年齡和水平的玩家挑戰。',
+                tipsTitle: '華容道技巧與解法',
+                tipsText: '入門玩家建議先完成第一行或第一列，再逐步還原剩餘部分。高級玩家可以嘗試「逐行還原法」或「逐列還原法」。記住，提前規劃移動路徑、避免無效往返，是減少步數的關鍵。多練習不同開局，能顯著提升邏輯思維能力和大腦反應速度。',
+                benefitsTitle: '為什麼要玩數字華容道？',
+                benefitsText: '數字華容道不僅能消磨時間，更是鍛鍊大腦的有效方式。它可以幫助兒童培養數學思維和專注力，幫助成人緩解壓力、保持腦力活躍，也適合老年人進行認知訓練。無需下載任何應用，打開瀏覽器即可免費線上遊玩。'
             },
             'en': {
                 title: 'Number Klotski',
@@ -355,12 +409,22 @@
                 hard: 'Hard',
                 restart: 'Restart',
                 showAnswer: 'Show Answer',
-                testConfetti: 'Test Confetti',
                 tip: 'Tip: Click a number adjacent to the empty space to move.',
                 winMessage: 'You Win! {moves} moves / {time}',
                 closeAlert: 'This is a web page. Please use the browser to close the tab.',
                 minimizeAlert: 'This is a web page. Please use the browser to minimize the window.',
-                noteAlert: 'How to play: Click numbers adjacent to the empty space to arrange them in order!'
+                noteAlert: 'How to play: Click numbers adjacent to the empty space to arrange them in order!',
+                seoTitle: 'Play Number Klotski Online - Classic Logic Puzzle Game',
+                seoDescription: 'Play Number Klotski online for free! Choose from Beginner 3x3, Easy 4x4, Medium 7x7, and Hard 10x10 modes. Train your logical thinking and brain speed. No download required.',
+                seoKeywords: 'Number Klotski, sliding puzzle, number puzzle, logic game, brain training, puzzle game online, 15 puzzle, Klotski solver',
+                aboutTitle: 'What is Number Klotski?',
+                aboutText: 'Number Klotski is a classic sliding number puzzle game inspired by the traditional Chinese Klotski puzzle. Players slide numbered tiles on a grid with one empty space to arrange the numbers in ascending order. It is easy to learn but challenging to master, making it an excellent choice for exercising logical thinking, spatial imagination, and patience.',
+                rulesTitle: 'How to Play',
+                rulesText: 'The board contains numbered tiles and one empty space. You can only move a tile that is adjacent to the empty space. The goal is to arrange all numbers in order from 1, 2, 3... with the fewest moves and shortest time. This site offers Beginner 3x3, Easy 4x4, Medium 7x7, and Hard 10x10 difficulties for players of all ages.',
+                tipsTitle: 'Klotski Tips and Strategy',
+                tipsText: 'Beginners should start by completing the first row or column, then gradually restore the rest. Advanced players can use the row-by-row or column-by-column method. Planning your moves ahead and avoiding unnecessary back-and-forth is the key to reducing move count. Practicing different starting positions can significantly improve logical thinking and reaction speed.',
+                benefitsTitle: 'Why Play Number Klotski?',
+                benefitsText: 'Number Klotski is not only a fun way to pass time but also an effective brain exercise. It helps children develop mathematical thinking and focus, helps adults relieve stress and stay mentally active, and is suitable for seniors to maintain cognitive function. No app download is needed—just open your browser and play for free.'
             },
             'ja': {
                 title: '数字華容道',
@@ -372,12 +436,22 @@
                 hard: '上級',
                 restart: 'リセット',
                 showAnswer: '答えを見る',
-                testConfetti: 'テスト',
                 tip: 'ヒント：空白の隣の数字をクリックして動かしてください。',
                 winMessage: 'クリア！{moves}手 / {time}',
                 closeAlert: 'これはウェブページです。ブラウザでタブを閉じてください。',
                 minimizeAlert: 'これはウェブページです。ブラウザでウィンドウを最小化してください。',
-                noteAlert: '遊び方：空白の隣の数字をクリックして、順番に並べてください！'
+                noteAlert: '遊び方：空白の隣の数字をクリックして、順番に並べてください！',
+                seoTitle: '数字華容道をオンラインで遊ぶ - 古典的な論理パズルゲーム',
+                seoDescription: '数字華容道を無料でオンラインでプレイ！入門3x3、初級4x4、中級7x7、上級10x10の難易度から選べます。論理思考と脳の反応速度を鍛えましょう。ダウンロード不要。',
+                seoKeywords: '数字華容道,スライドパズル,数字パズル,論理ゲーム,脳トレ,パズルゲーム,15パズル',
+                aboutTitle: '数字華容道とは？',
+                aboutText: '数字華容道は、中国の伝統的な華容道パズルをモチーフにしたクラシックな数字スライドパズルゲームです。空いたマスを利用して数字のタイルを動かし、小さい順に並べるのが目的です。ルールは簡単ですが、奥が深く、論理思考、空間認識力、忍耐力を鍛えるのに最適です。',
+                rulesTitle: 'ルール',
+                rulesText: '盤面には数字のタイルと1つの空きマスがあります。空きマスに隣接したタイルのみ動かすことができます。目標は、1、2、3…と数字を順番に並べることです。できるだけ少ない手数と短い時間でクリアしましょう。本サイトでは入門3x3、初級4x4、中級7x7、上級10x10の4段階の難易度を用意しています。',
+                tipsTitle: '華容道のコツと解法',
+                tipsText: '初心者はまず1列目または1行目を完成させ、残りを少しずつ戻していくのがおすすめです。上級者は「1行ずつ戻す方法」や「1列ずつ戻す方法」が使えます。移動ルートを事前に計画し、無駄な往復を避けることが、手数を減らすコツです。様々な初期配置で練習することで、論理思考力と反応速度が大幅に向上します。',
+                benefitsTitle: 'なぜ数字華容道を遊ぶのか？',
+                benefitsText: '数字華容道は気軽に遊べる脳トレゲームです。子供の数学的思考力と集中力を育み、大人のストレス解消や脳の活性化に役立ち、高齢者の認知機能維持にも適しています。アプリのダウンロードは不要で、ブラウザを開けば無料で遊べます。'
             },
             'vi': {
                 title: 'Hoa Rồng Đạo Số',
@@ -389,12 +463,22 @@
                 hard: 'Khó',
                 restart: 'Chơi lại',
                 showAnswer: 'Xem đáp án',
-                testConfetti: 'Test',
                 tip: 'Gợi ý: Nhấn số liền kề ô trống để di chuyển.',
                 winMessage: 'Chúc mừng! {moves} bước / {time}',
                 closeAlert: 'Đây là trang web. Vui lòng dùng trình duyệt để đóng tab.',
                 minimizeAlert: 'Đây là trang web. Vui lòng dùng trình duyệt để thu nhỏ cửa sổ.',
-                noteAlert: 'Cách chơi: Nhấn số liền kề ô trống để sắp xếp theo thứ tự!'
+                noteAlert: 'Cách chơi: Nhấn số liền kề ô trống để sắp xếp theo thứ tự!',
+                seoTitle: 'Chơi Hoa Rồng Đạo Số Trực Tuyến - Trò Chơi Ghép Hình Logic Kinh Điển',
+                seoDescription: 'Chơi Hoa Rồng Đạo Số trực tuyến miễn phí! Có chế độ Nhập môn 3x3, Dễ 4x4, Trung bình 7x7 và Khó 10x10. Rèn luyện tư duy logic và tốc độ phản xạ của não. Không cần tải xuống.',
+                seoKeywords: 'Hoa Rồng Đạo Số, ghép hình trượt, trò chơi số, game logic, luyện não, puzzle game, Klotski',
+                aboutTitle: 'Hoa Rồng Đạo Số là gì?',
+                aboutText: 'Hoa Rồng Đạo Số là trò chơi ghép hình số kinh điển, lấy cảm hứng từ trò chơi dân gian truyền thống Trung Hoa. Người chơi trượt các khối số trên bàn cờ có một ô trống để sắp xếp các số theo thứ tự từ nhỏ đến lớn. Trò chơi dễ hiểu nhưng đầy thử thách, rất phù hợp để rèn luyện tư duy logic, tưởng tượng không gian và sự kiên nhẫn.',
+                rulesTitle: 'Luật Chơi',
+                rulesText: 'Bàn cờ gồm các khối số và một ô trống. Bạn chỉ có thể di chuyển khối số liền kề với ô trống. Mục tiêu là sắp xếp tất cả các số theo thứ tự 1, 2, 3… với ít bước nhất và thời gian ngắn nhất. Trang web cung cấp bốn cấp độ: Nhập môn 3x3, Dễ 4x4, Trung bình 7x7 và Khó 10x10, phù hợp với mọi lứa tuổi.',
+                tipsTitle: 'Mẹo và Chiến Thuật',
+                tipsText: 'Người mới nên hoàn thành hàng đầu tiên hoặc cột đầu tiên trước, sau đó dần dần khôi phục phần còn lại. Người chơi nâng cao có thể thử phương pháp khôi phục từng hàng hoặc từng cột. Lập kế hoạch di chuyển trước và tránh đi lại không cần thiết là chìa khóa để giảm số bước. Luyện tập nhiều vị trí xuất phát khác nhau sẽ cải thiện đáng kể tư duy logic và tốc độ phản xạ.',
+                benefitsTitle: 'Tại Sao Nên Chơi Hoa Rồng Đạo Số?',
+                benefitsText: 'Hoa Rồng Đạo Số không chỉ là cách giải trí mà còn là bài tập não bộ hiệu quả. Nó giúp trẻ em phát triển tư duy toán học và sự tập trung, giúp người lớn giảm căng thẳng và giữ cho tinh thần minh mẫn, đồng thời phù hợp với người cao tuổi để duy trì chức năng nhận thức. Không cần tải ứng dụng—chỉ cần mở trình duyệt và chơi miễn phí.'
             },
             'fr': {
                 title: 'Klotski Numérique',
@@ -406,12 +490,22 @@
                 hard: 'Difficile',
                 restart: 'Recommencer',
                 showAnswer: 'Voir la réponse',
-                testConfetti: 'Test',
                 tip: 'Astuce : Cliquez sur un nombre adjacent à la case vide pour déplacer.',
                 winMessage: 'Bravo ! {moves} coups / {time}',
                 closeAlert: 'Ceci est une page web. Veuillez utiliser le navigateur pour fermer l\'onglet.',
                 minimizeAlert: 'Ceci est une page web. Veuillez utiliser le navigateur pour minimiser la fenêtre.',
-                noteAlert: 'Comment jouer : Cliquez sur les nombres adjacents à la case vide pour les mettre dans l\'ordre !'
+                noteAlert: 'Comment jouer : Cliquez sur les nombres adjacents à la case vide pour les mettre dans l\'ordre !',
+                seoTitle: 'Jouer au Klotski Numérique en Ligne - Jeu de Puzzle Logique Classique',
+                seoDescription: 'Jouez gratuitement au Klotski Numérique en ligne ! Choisissez parmi les modes Débutant 3x3, Facile 4x4, Moyen 7x7 et Difficile 10x10. Entraînez votre pensée logique et la vitesse de votre cerveau. Aucun téléchargement requis.',
+                seoKeywords: 'Klotski Numérique, puzzle coulissant, jeu de logique, entraînement cérébral, jeu de puzzle, 15 puzzle',
+                aboutTitle: 'Qu\'est-ce que le Klotski Numérique ?',
+                aboutText: 'Le Klotski Numérique est un jeu de puzzle classique inspiré du Klotski traditionnel chinois. Les joueurs font glisser des tuiles numérotées sur une grille avec une case vide pour arranger les nombres dans l\'ordre croissant. Facile à apprendre mais difficile à maîtriser, c\'est un excellent exercice pour la pensée logique, l\'imagination spatiale et la patience.',
+                rulesTitle: 'Règles du Jeu',
+                rulesText: 'Le plateau contient des tuiles numérotées et une case vide. Vous ne pouvez déplacer qu\'une tuile adjacente à la case vide. L\'objectif est d\'arranger tous les nombres dans l\'ordre 1, 2, 3... avec le moins de coups possible et en un minimum de temps. Ce site propose quatre niveaux : Débutant 3x3, Facile 4x4, Moyen 7x7 et Difficile 10x10.',
+                tipsTitle: 'Conseils et Stratégie',
+                tipsText: 'Les débutants devraient commencer par compléter la première ligne ou colonne, puis restaurer progressivement le reste. Les joueurs avancés peuvent utiliser la méthode ligne par ligne ou colonne par colonne. Planifier ses mouvements à l\'avance et éviter les allers-retours inutiles est la clé pour réduire le nombre de coups.',
+                benefitsTitle: 'Pourquoi Jouer au Klotski Numérique ?',
+                benefitsText: 'Le Klotski Numérique est non seulement divertissant, mais c\'est aussi un excellent exercice pour le cerveau. Il aide les enfants à développer leur pensée mathématique et leur concentration, les adultes à réduire le stress et à rester mentalement actifs, et convient aux seniors pour maintenir leurs fonctions cognitives.'
             },
             'de': {
                 title: 'Zahlen-Klotski',
@@ -423,12 +517,22 @@
                 hard: 'Schwer',
                 restart: 'Neu starten',
                 showAnswer: 'Lösung anzeigen',
-                testConfetti: 'Test',
                 tip: 'Tipp: Klicke auf eine Zahl neben dem leeren Feld, um sie zu verschieben.',
                 winMessage: 'Geschafft! {moves} Züge / {time}',
                 closeAlert: 'Dies ist eine Webseite. Bitte verwenden Sie den Browser, um den Tab zu schließen.',
                 minimizeAlert: 'Dies ist eine Webseite. Bitte verwenden Sie den Browser, um das Fenster zu minimieren.',
-                noteAlert: 'Spielanleitung: Klicke auf Zahlen neben dem leeren Feld, um sie in Reihenfolge zu bringen!'
+                noteAlert: 'Spielanleitung: Klicke auf Zahlen neben dem leeren Feld, um sie in Reihenfolge zu bringen!',
+                seoTitle: 'Zahlen-Klotski Online Spielen - Klassisches Logik-Puzzle',
+                seoDescription: 'Spiele Zahlen-Klotski kostenlos online! Wähle zwischen Anfänger 3x3, Einfach 4x4, Mittel 7x7 und Schwer 10x10. Trainiere dein logisches Denken und deine Reaktionsgeschwindigkeit. Kein Download nötig.',
+                seoKeywords: 'Zahlen-Klotski, Schiebepuzzle, Zahlenpuzzle, Logikspiel, Gehirntraining, Puzzle Spiel',
+                aboutTitle: 'Was ist Zahlen-Klotski?',
+                aboutText: 'Zahlen-Klotski ist ein klassisches Zahlen-Schiebepuzzle, inspiriert vom traditionellen chinesischen Klotski. Spieler verschieben nummerierte Kacheln auf einem Spielfeld mit einem leeren Feld, um die Zahlen in aufsteigender Reihenfolge anzuordnen. Einfach zu erlernen, aber schwer zu meistern—ideal für logisches Denken, räumliche Vorstellungskraft und Geduld.',
+                rulesTitle: 'Spielregeln',
+                rulesText: 'Das Spielfeld enthält nummerierte Kacheln und ein leeres Feld. Du kannst nur eine Kachel verschieben, die direkt neben dem leeren Feld liegt. Das Ziel ist es, alle Zahlen in der Reihenfolge 1, 2, 3... mit möglichst wenigen Zügen und in kurzer Zeit anzuordnen. Diese Website bietet vier Schwierigkeitsstufen: Anfänger 3x3, Einfach 4x4, Mittel 7x7 und Schwer 10x10.',
+                tipsTitle: 'Tipps und Strategie',
+                tipsText: 'Anfänger sollten zuerst die erste Reihe oder Spalte vervollständigen und dann nach und nach den Rest wiederherstellen. Fortgeschrittene Spieler können die Methode Reihe für Reihe oder Spalte für Spalte verwenden. Plane deine Züge im Voraus und vermeide unnötiges Hin- und Herwechseln, um die Zugzahl zu reduzieren.',
+                benefitsTitle: 'Warum Zahlen-Klotski spielen?',
+                benefitsText: 'Zahlen-Klotski ist nicht nur unterhaltsam, sondern auch ein effektives Gehirntraining. Es hilft Kindern, mathematisches Denken und Konzentration zu entwickeln, Erwachsenen Stress abzubauen und geistig aktiv zu bleiben, und eignet sich für Senioren zur Erhaltung der kognitiven Funktionen.'
             },
             'es': {
                 title: 'Klotski Numérico',
@@ -440,12 +544,22 @@
                 hard: 'Difícil',
                 restart: 'Reiniciar',
                 showAnswer: 'Ver respuesta',
-                testConfetti: 'Test',
                 tip: 'Consejo: Haz clic en un número adyacente al espacio vacío para moverlo.',
                 winMessage: '¡Ganaste! {moves} movimientos / {time}',
                 closeAlert: 'Esta es una página web. Por favor usa el navegador para cerrar la pestaña.',
                 minimizeAlert: 'Esta es una página web. Por favor usa el navegador para minimizar la ventana.',
-                noteAlert: 'Cómo jugar: Haz clic en los números adyacentes al espacio vacío para ordenarlos!'
+                noteAlert: 'Cómo jugar: Haz clic en los números adyacentes al espacio vacío para ordenarlos!',
+                seoTitle: 'Jugar Klotski Numérico en Línea - Juego de Puzzle Lógico Clásico',
+                seoDescription: '¡Juega Klotski Numérico gratis en línea! Elige entre Principiante 3x3, Fácil 4x4, Medio 7x7 y Difícil 10x10. Entrena tu pensamiento lógico y la velocidad de tu cerebro. Sin descargas.',
+                seoKeywords: 'Klotski Numérico, puzzle deslizante, juego de números, juego de lógica, entrenamiento cerebral, puzzle online',
+                aboutTitle: '¿Qué es el Klotski Numérico?',
+                aboutText: 'El Klotski Numérico es un juego de puzzle clásico inspirado en el Klotski tradicional chino. Los jugadores deslizan fichas numeradas en una cuadrícula con un espacio vacío para ordenar los números de menor a mayor. Es fácil de aprender pero desafiante de dominar, ideal para ejercitar el pensamiento lógico, la imaginación espacial y la paciencia.',
+                rulesTitle: 'Reglas del Juego',
+                rulesText: 'El tablero contiene fichas numeradas y un espacio vacío. Solo puedes mover una ficha adyacente al espacio vacío. El objetivo es ordenar todos los números en secuencia 1, 2, 3... con la menor cantidad de movimientos y en el menor tiempo posible. Este sitio ofrece cuatro niveles: Principiante 3x3, Fácil 4x4, Medio 7x7 y Difícil 10x10.',
+                tipsTitle: 'Consejos y Estrategia',
+                tipsText: 'Los principiantes deben completar primero la primera fila o columna y luego restaurar gradualmente el resto. Los jugadores avanzados pueden usar el método fila por fila o columna por columna. Planificar tus movimientos con anticipación y evitar ir y venir innecesariamente es la clave para reducir la cantidad de movimientos.',
+                benefitsTitle: '¿Por Qué Jugar al Klotski Numérico?',
+                benefitsText: 'El Klotski Numérico no solo es divertido, sino también un ejercicio cerebral efectivo. Ayuda a los niños a desarrollar el pensamiento matemático y la concentración, a los adultos a reducir el estrés y mantenerse mentalmente activos, y es adecuado para personas mayores para mantener la función cognitiva.'
             },
             'ko': {
                 title: '숫자 화용도',
@@ -457,12 +571,22 @@
                 hard: '고급',
                 restart: '다시 시작',
                 showAnswer: '정답 보기',
-                testConfetti: '테스트',
                 tip: '팁: 빈 칸 옆의 숫자를 클릭하면 이동합니다.',
                 winMessage: '클리어! {moves}회 / {time}',
                 closeAlert: '이것은 웹 페이지입니다. 브라우저를 사용하여 탭을 닫으세요.',
                 minimizeAlert: '이것은 웹 페이지입니다. 브라우저를 사용하여 창을 최소화하세요.',
-                noteAlert: '플레이 방법: 빈 칸 옆의 숫자를 클릭하여 순서대로 배열하세요!'
+                noteAlert: '플레이 방법: 빈 칸 옆의 숫자를 클릭하여 순서대로 배열하세요!',
+                seoTitle: '숫자 화용도 온라인 - 클래식 논리 퍼즐 게임',
+                seoDescription: '숫자 화용도를 무료로 온라인에서 플레이하세요! 입문 3x3, 초급 4x4, 중급 7x7, 고급 10x10 난이도를 선택할 수 있습니다. 논리적 사고와 뇌 반응 속도를 훈련하세요. 다운로드 불필요.',
+                seoKeywords: '숫자 화용도, 슬라이딩 퍼즐, 숫자 퍼즐, 논리 게임, 두뇌 트레이닝, 퍼즐 게임',
+                aboutTitle: '숫자 화용도란?',
+                aboutText: '숫자 화용도는 전통적인 중국 화용도 퍼즐에서 영감을 받은 클래식한 숫자 슬라이딩 퍼즐 게임입니다. 플레이어는 빈 칸이 있는 보드에서 숫자 타일을 밀어 작은 숫자부터 큰 숫자 순서대로 배열해야 합니다. 쉽게 배울 수 있지만 마스터하기는 어려워 논리적 사고, 공간 상상력, 인내심을 기르기에 최적입니다.',
+                rulesTitle: '게임 규칙',
+                rulesText: '보드에는 숫자 타일과 하나의 빈 칸이 있습니다. 빈 칸과 인접한 타일만 이동할 수 있습니다. 목표는 모든 숫자를 1, 2, 3… 순서대로 가능한 적은 이동 횟수와 짧은 시간 내에 배열하는 것입니다. 본 사이트는 입문 3x3, 초급 4x4, 중급 7x7, 고급 10x10의 네 가지 난이도를 제공합니다.',
+                tipsTitle: '화용도 팁과 전략',
+                tipsText: '입문자는 먼저 첫 번째 행 또는 열을 완성한 후 나머지를 점진적으로 복원하는 것이 좋습니다. 고급 플레이어는 행 단위 또는 열 단위 복원법을 사용할 수 있습니다. 이동 경로를 미리 계획하고 불필요한 왕복을 피하는 것이 이동 횟수를 줄이는 핵심입니다.',
+                benefitsTitle: '왜 숫자 화용도를 플레이해야 할까요?',
+                benefitsText: '숫자 화용도는 단순한 오락을 넘어 효과적인 두뇌 운동입니다. 아이들의 수학적 사고력과 집중력을 키워주고, 성인의 스트레스를 줄이며 정신적으로 활동적이게 유지하며, 노인의 인지 기능 유지에도 적합합니다. 앱 다운로드 없이 브라우저를 열면 무료로 즐길 수 있습니다.'
             }
         };
 
@@ -493,17 +617,71 @@
                 return text;
             },
 
+            getUrlLang() {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    return params.get('lang');
+                } catch (e) {
+                    return null;
+                }
+            },
+
+            setUrlLang(lang) {
+                try {
+                    const url = new URL(window.location.href);
+                    if (lang && lang !== 'zh-CN') {
+                        url.searchParams.set('lang', lang);
+                    } else {
+                        url.searchParams.delete('lang');
+                    }
+                    window.history.replaceState({}, '', url.toString());
+                } catch (e) {}
+            },
+
+            updateMetaTags() {
+                const title = this.t('seoTitle');
+                const desc = this.t('seoDescription');
+                const keywords = this.t('seoKeywords');
+                const localeMap = {
+                    'zh-CN': 'zh_CN', 'zh-TW': 'zh_TW', 'en': 'en_US', 'ja': 'ja_JP',
+                    'vi': 'vi_VN', 'fr': 'fr_FR', 'de': 'de_DE', 'es': 'es_ES', 'ko': 'ko_KR'
+                };
+                const locale = localeMap[this.currentLang] || 'zh_CN';
+                const baseUrl = 'https://games.leonova.xyz/';
+                const langUrl = this.currentLang === 'zh-CN' ? baseUrl : `${baseUrl}?lang=${this.currentLang}`;
+
+                document.title = title;
+                this.setAttr('seoTitle', 'textContent', title);
+                this.setAttr('seoDescription', 'content', desc);
+                this.setAttr('seoKeywords', 'content', keywords);
+                this.setAttr('canonicalLink', 'href', langUrl);
+                this.setAttr('ogUrl', 'content', langUrl);
+                this.setAttr('ogTitle', 'content', title);
+                this.setAttr('ogDescription', 'content', desc);
+                this.setAttr('ogLocale', 'content', locale);
+                this.setAttr('twitterUrl', 'content', langUrl);
+                this.setAttr('twitterTitle', 'content', title);
+                this.setAttr('twitterDescription', 'content', desc);
+            },
+
+            setAttr(id, attr, value) {
+                const el = document.getElementById(id);
+                if (el) el[attr] = value;
+            },
+
             setLanguage(lang) {
                 this.currentLang = this.normalizeLang(lang);
                 localStorage.setItem('klotski-lang', this.currentLang);
-                document.getElementById('langSelect').value = this.currentLang;
+                this.setUrlLang(this.currentLang);
                 document.documentElement.lang = this.currentLang;
+                document.getElementById('langSelect').value = this.currentLang;
 
                 document.querySelectorAll('[data-i18n]').forEach(el => {
                     const key = el.getAttribute('data-i18n');
                     el.textContent = this.t(key);
                 });
 
+                this.updateMetaTags();
                 if (game) game.updateWinMessage();
             },
 
@@ -528,6 +706,13 @@
             },
 
             async init() {
+                // 优先级：URL参数 > localStorage > 浏览器语言 > IP定位
+                const urlLang = this.getUrlLang();
+                if (urlLang && translations[this.normalizeLang(urlLang)]) {
+                    this.setLanguage(urlLang);
+                    return;
+                }
+
                 const saved = localStorage.getItem('klotski-lang');
                 if (saved && translations[saved]) {
                     this.setLanguage(saved);
@@ -693,7 +878,7 @@
                 }
 
                 const colors = ['#e74c3c', '#f1c40f', '#2ecc71', '#3498db', '#9b59b6', '#ff6b6b', '#1abc9c', '#e67e22'];
-                const container = document.querySelector('.game-container') || document.querySelector('.relative.w-screen');
+                const container = document.querySelector('.relative.w-screen') || document.body;
                 const w = container.clientWidth;
                 const h = container.clientHeight;
 
