@@ -379,12 +379,30 @@
         }
 
         @media (max-width: 640px) {
-            .top-bar, .bottom-bar { width: 92vw; }
-            .difficulty-selector { gap: 8px; top: 15%; }
-            .diff-btn { padding: 6px 14px; }
-            .controls { gap: 16px; }
-            .game-btn { padding: 10px 24px; }
-            .lang-selector select { font-size: 12px; padding: 5px 8px; }
+            .top-bar {
+                width: 92vw;
+                height: 18%;
+                min-height: 100px;
+            }
+            .bottom-bar {
+                width: 92vw;
+                height: 12%;
+                min-height: 60px;
+            }
+            .title-area { top: 3%; }
+            .game-title { font-size: 22px; }
+            .info-bar { top: 10%; gap: 24px; font-size: 13px; }
+            .difficulty-selector { top: 14%; gap: 8px; }
+            .diff-btn { padding: 5px 12px; font-size: 12px; }
+            .game-board {
+                width: 85vw;
+                max-width: 55vh;
+            }
+            .controls { bottom: 12%; gap: 12px; }
+            .game-btn { padding: 9px 18px; font-size: 14px; }
+            .tip { bottom: 18%; font-size: 11px; }
+            .lang-selector { top: 2.5%; right: 2.5%; }
+            .lang-selector select { font-size: 11px; padding: 4px 6px; }
         }
     </style>
 </head>
