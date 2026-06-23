@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字华容道</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: #f5e0b8;
+        }
+
+        /* ================== 场景容器 ================== */
+        .scene {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: url('background.jpg') no-repeat center center;
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* ================== 顶部底衬 ================== */
+        .top-bar {
+            position: absolute;
+            top: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 76vw;
+            max-width: 720px;
+            height: 22%;
+            min-height: 120px;
+            background: rgba(255, 248, 235, 0.88);
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            z-index: 1;
+        }
+
+        /* ================== 顶部按钮 ================== */
+        .header-btns {
+            position: absolute;
+            top: 2.8%;
+            left: 3.5%;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .h-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.3);
+            transition: transform 0.1s;
+        }
+
+        .h-btn:hover { transform: scale(1.12); }
+        .h-btn.close { background: #e74c3c; }
+        .h-btn.min { background: #7ed321; }
+        .h-btn.note { background: #3498db; font-size: 16px; }
+
+        /* ================== 语言选择器 ================== */
+        .lang-selector {
+            position: absolute;
+            top: 2.8%;
+            right: 3.5%;
+            z-index: 10;
+        }
+
+        .lang-selector select {
+            padding: 6px 10px;
+            border-radius: 16px;
+            border: 2px solid rgba(180, 140, 100, 0.4);
+            background: rgba(255, 255, 255, 0.9);
+            color: #6d4c41;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* ================== 标题区域 ================== */
+        .title-area {
+            position: absolute;
+            top: 4%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .robot {
+            width: 46px;
+            height: 46px;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
+        }
+
+        .game-title {
+            font-size: clamp(20px, 3.4vw, 38px);
+            font-weight: 900;
+            color: #d35400;
+            text-shadow:
+                2px 2px 0 #fff,
+                -1px -1px 0 #fff,
+                0 2px 8px rgba(255, 140, 0, 0.4);
+            letter-spacing: 2px;
+        }
+
+        /* ================== 信息栏 ================== */
+        .info-bar {
+            position: absolute;
+            top: 13%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            font-size: clamp(13px, 2vw, 18px);
+            font-weight: 800;
+            color: #6d4c41;
+            z-index: 10;
+        }
+
+        /* ================== 难度选择 ================== */
+        .difficulty-selector {
+            position: absolute;
+            top: 16%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .diff-btn {
+            padding: 8px 22px;
+            font-size: clamp(12px, 1.6vw, 16px);
+            font-weight: 800;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #6d4c41;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            transition: all 0.15s;
+            border: 2px solid transparent;
+        }
+
+        .diff-btn:hover {
+            transform: translateY(-2px);
+            background: #fff;
+        }
+
+        .diff-btn.active {
+            background: #ffd93d;
+            color: #8b4513;
+            border-color: #f1c40f;
+            box-shadow: 0 4px 12px rgba(241, 196, 15, 0.4);
+        }
+
+        /* ================== 主游戏板 ================== */
+        .game-board {
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70vw;
+            max-width: 85vh;
+            aspect-ratio: 16 / 10;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 12px;
+        }
+
+        /* ================== 棋盘框架 ================== */
+        .board-frame {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            padding: 8px;
+            border-radius: 16px;
+            background:
+                linear-gradient(180deg, #ff6b6b, #e74c3c) top / 100% 7px no-repeat,
+                linear-gradient(180deg, #ffd93d, #f1c40f) bottom / 100% 7px no-repeat,
+                linear-gradient(180deg, #6bcf7f, #27ae60) left / 7px 100% no-repeat,
+                linear-gradient(180deg, #5dade2, #3498db) right / 7px 100% no-repeat,
+                #fcf6e8;
+            box-shadow:
+                inset 0 0 15px rgba(0,0,0,0.08),
+                0 6px 18px rgba(0,0,0,0.18);
+        }
+
+        .board {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #d8c9a8;
+            padding: 3px;
+            border-radius: 9px;
+            overflow: hidden;
+        }
+
+        .tile {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #5d4037;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            background: linear-gradient(145deg, #fffdf5, #f2e6d0);
+            box-shadow:
+                inset 0 1px 1px rgba(255,255,255,0.9),
+                0 2px 3px rgba(0,0,0,0.12);
+            border: 1px solid rgba(170, 130, 90, 0.2);
+            transition: left 0.18s ease, top 0.18s ease, transform 0.1s, box-shadow 0.1s, background 0.1s;
+        }
+
+        .tile:hover {
+            transform: scale(1.05);
+            z-index: 2;
+            background: linear-gradient(145deg, #fff8dc, #ffeaa7);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .tile.moving {
+            z-index: 5;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+        }
+
+        .tile.empty {
+            background: #8b6b4a;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.35);
+            border: none;
+            cursor: default;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        /* ================== 底部底衬 ================== */
+        .bottom-bar {
+            position: absolute;
+            bottom: 6%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 76vw;
+            max-width: 720px;
+            height: 14%;
+            min-height: 80px;
+            background: rgba(255, 248, 235, 0.88);
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            z-index: 1;
+        }
+
+        /* ================== 底部按钮 ================== */
+        .controls {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 28px;
+            z-index: 10;
+        }
+
+        .game-btn {
+            padding: 11px 34px;
+            font-size: clamp(14px, 2.2vw, 21px);
+            font-weight: 900;
+            border: none;
+            border-radius: 28px;
+            cursor: pointer;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+            box-shadow:
+                0 5px 0 rgba(0,0,0,0.18),
+                0 8px 16px rgba(0,0,0,0.25);
+            transition: all 0.08s;
+            position: relative;
+            top: 0;
+        }
+
+        .game-btn:active {
+            top: 4px;
+            box-shadow:
+                0 1px 0 rgba(0,0,0,0.18),
+                0 3px 8px rgba(0,0,0,0.25);
+        }
+
+        .btn-restart {
+            background: linear-gradient(180deg, #ff8585, #e74c3c);
+            border-bottom: 4px solid #c0392b;
+        }
+
+        .btn-answer {
+            background: linear-gradient(180deg, #58d5f5, #0abde3);
+            border-bottom: 4px solid #0984a3;
+        }
+
+        /* ================== 提示 ================== */
+        .tip {
+            position: absolute;
+            bottom: 7%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(10px, 1.5vw, 14px);
+            color: #6d4c41;
+            font-weight: 700;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        /* ================== 胜利消息 ================== */
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(18px, 3.5vw, 34px);
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            text-align: center;
+            z-index: 30;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .win {
+            animation: pulse 1s infinite;
+            color: #ffd700;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* ================== 通关彩条 ================== */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 24px;
+            bottom: 20px;
+            right: 20px;
+            pointer-events: none;
+            z-index: 25;
+            border-radius: 2px;
+            background: #e74c3c;
+            opacity: 0;
+        }
+
+        @media (max-width: 640px) {
+            .top-bar, .bottom-bar { width: 92vw; }
+            .difficulty-selector { gap: 8px; top: 15%; }
+            .diff-btn { padding: 6px 14px; }
+            .controls { gap: 16px; }
+            .game-btn { padding: 10px 24px; }
+            .lang-selector select { font-size: 12px; padding: 5px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene">
+        <div class="game-container">
+            <!-- 顶部底衬 -->
+            <div class="top-bar"></div>
+
+            <!-- 语言选择器 -->
+            <div class="lang-selector">
+                <select id="langSelect" onchange="I18N.setLanguage(this.value)">
+                    <option value="zh-CN">简体中文</option>
+                    <option value="zh-TW">繁體中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="es">Español</option>
+                    <option value="ko">한국어</option>
+                </select>
+            </div>
+
+            <!-- 标题 -->
+            <div class="title-area">
+                <svg class="robot" viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffe066;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ffb347;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <line x1="50" y1="18" x2="50" y2="5" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round" />
+                    <circle cx="50" cy="5" r="6" fill="#ff6b6b" />
+                    <rect x="12" y="38" width="10" height="18" rx="4" fill="#ff6b6b" />
+                    <rect x="78" y="38" width="10" height="18" rx="4" fill="#ff6b6b" />
+                    <rect x="25" y="20" width="50" height="42" rx="12" fill="url(#bodyGrad)" stroke="#fff" stroke-width="3" />
+                    <circle cx="40" cy="38" r="5" fill="#333" />
+                    <circle cx="60" cy="38" r="5" fill="#333" />
+                    <circle cx="42" cy="36" r="1.5" fill="#fff" />
+                    <circle cx="62" cy="36" r="1.5" fill="#fff" />
+                    <path d="M 42 50 Q 50 56 58 50" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round" />
+                    <rect x="38" y="62" width="24" height="22" rx="6" fill="#5dade2" stroke="#fff" stroke-width="2" />
+                    <circle cx="50" cy="72" r="5" fill="#fff" />
+                </svg>
+
+                <div class="game-title" data-i18n="title">数字华容道</div>
+            </div>
+
+            <!-- 信息栏 -->
+            <div class="info-bar">
+                <span><span data-i18n="movesLabel">步数</span>：<strong id="moves">0</strong></span>
+                <span><span data-i18n="timeLabel">时间</span>：<strong id="time">00:00</strong></span>
+            </div>
+
+            <!-- 难度选择 -->
+            <div class="difficulty-selector">
+                <button class="diff-btn active" data-size="4" onclick="game.setSize(4)"><span data-i18n="easy">初级</span></button>
+                <button class="diff-btn" data-size="7" onclick="game.setSize(7)"><span data-i18n="medium">中级</span></button>
+                <button class="diff-btn" data-size="10" onclick="game.setSize(10)"><span data-i18n="hard">高级</span></button>
+            </div>
+
+            <!-- 游戏板 -->
+            <div class="game-board">
+                <div class="board-frame">
+                    <div class="board" id="board"></div>
+                </div>
+            </div>
+
+            <!-- 底部底衬 -->
+            <div class="bottom-bar"></div>
+
+            <!-- 底部按钮 -->
+            <div class="controls">
+                <button class="game-btn btn-restart" onclick="game.shuffle()"><span data-i18n="restart">重新开始</span></button>
+                <button class="game-btn btn-answer" onclick="game.showAnswer()"><span data-i18n="showAnswer">查看答案</span></button>
+            </div>
+
+            <!-- 提示 -->
+            <div class="tip" data-i18n="tip">提示：点击空白格相邻的数字即可移动</div>
+
+            <!-- 胜利消息 -->
+            <div class="message" id="message"></div>
+        </div>
+    </div>
+
+    <!-- 移动音效 -->
+    <audio id="moveSound" src="move.mp3" preload="auto"></audio>
+
+    <!-- 胜利撒花音效 -->
+    <audio id="victorySound" src="victory.mp3" preload="auto"></audio>
+
+    <script>
+        // ================== 多语言支持 ==================
+        const translations = {
+            'zh-CN': {
+                title: '数字华容道',
+                movesLabel: '步数',
+                timeLabel: '时间',
+                easy: '初级',
+                medium: '中级',
+                hard: '高级',
+                restart: '重新开始',
+                showAnswer: '查看答案',
+                testConfetti: '测试撒花',
+                tip: '提示：点击空白格相邻的数字即可移动',
+                winMessage: '恭喜通关！{moves} 步 / {time}',
+                closeAlert: '这是网页版，关闭功能请在浏览器中操作~',
+                minimizeAlert: '这是网页版，最小化功能请在浏览器中操作~',
+                noteAlert: '玩法：点击空白格相邻的数字，把数字按顺序排列即可通关！'
+            },
+            'zh-TW': {
+                title: '數字華容道',
+                movesLabel: '步數',
+                timeLabel: '時間',
+                easy: '初級',
+                medium: '中級',
+                hard: '高級',
+                restart: '重新開始',
+                showAnswer: '查看答案',
+                testConfetti: '測試撒花',
+                tip: '提示：點擊空白格相鄰的數字即可移動',
+                winMessage: '恭喜通關！{moves} 步 / {time}',
+                closeAlert: '這是網頁版，關閉功能請在瀏覽器中操作~',
+                minimizeAlert: '這是網頁版，最小化功能請在瀏覽器中操作~',
+                noteAlert: '玩法：點擊空白格相鄰的數字，把數字按順序排列即可通關！'
+            },
+            'en': {
+                title: 'Number Klotski',
+                movesLabel: 'Moves',
+                timeLabel: 'Time',
+                easy: 'Easy',
+                medium: 'Medium',
+                hard: 'Hard',
+                restart: 'Restart',
+                showAnswer: 'Show Answer',
+                testConfetti: 'Test Confetti',
+                tip: 'Tip: Click a number adjacent to the empty space to move.',
+                winMessage: 'You Win! {moves} moves / {time}',
+                closeAlert: 'This is a web page. Please use the browser to close the tab.',
+                minimizeAlert: 'This is a web page. Please use the browser to minimize the window.',
+                noteAlert: 'How to play: Click numbers adjacent to the empty space to arrange them in order!'
+            },
+            'ja': {
+                title: '数字華容道',
+                movesLabel: '手数',
+                timeLabel: '時間',
+                easy: '初級',
+                medium: '中級',
+                hard: '上級',
+                restart: 'リセット',
+                showAnswer: '答えを見る',
+                testConfetti: 'テスト',
+                tip: 'ヒント：空白の隣の数字をクリックして動かしてください。',
+                winMessage: 'クリア！{moves}手 / {time}',
+                closeAlert: 'これはウェブページです。ブラウザでタブを閉じてください。',
+                minimizeAlert: 'これはウェブページです。ブラウザでウィンドウを最小化してください。',
+                noteAlert: '遊び方：空白の隣の数字をクリックして、順番に並べてください！'
+            },
+            'vi': {
+                title: 'Hoa Rồng Đạo Số',
+                movesLabel: 'Số bước',
+                timeLabel: 'Thờgian',
+                easy: 'Dễ',
+                medium: 'Trung bình',
+                hard: 'Khó',
+                restart: 'Chơi lại',
+                showAnswer: 'Xem đáp án',
+                testConfetti: 'Test',
+                tip: 'Gợi ý: Nhấn số liền kề ô trống để di chuyển.',
+                winMessage: 'Chúc mừng! {moves} bước / {time}',
+                closeAlert: 'Đây là trang web. Vui lòng dùng trình duyệt để đóng tab.',
+                minimizeAlert: 'Đây là trang web. Vui lòng dùng trình duyệt để thu nhỏ cửa sổ.',
+                noteAlert: 'Cách chơi: Nhấn số liền kề ô trống để sắp xếp theo thứ tự!'
+            },
+            'fr': {
+                title: 'Klotski Numérique',
+                movesLabel: 'Coups',
+                timeLabel: 'Temps',
+                easy: 'Facile',
+                medium: 'Moyen',
+                hard: 'Difficile',
+                restart: 'Recommencer',
+                showAnswer: 'Voir la réponse',
+                testConfetti: 'Test',
+                tip: 'Astuce : Cliquez sur un nombre adjacent à la case vide pour déplacer.',
+                winMessage: 'Bravo ! {moves} coups / {time}',
+                closeAlert: 'Ceci est une page web. Veuillez utiliser le navigateur pour fermer l\'onglet.',
+                minimizeAlert: 'Ceci est une page web. Veuillez utiliser le navigateur pour minimiser la fenêtre.',
+                noteAlert: 'Comment jouer : Cliquez sur les nombres adjacents à la case vide pour les mettre dans l\'ordre !'
+            },
+            'de': {
+                title: 'Zahlen-Klotski',
+                movesLabel: 'Züge',
+                timeLabel: 'Zeit',
+                easy: 'Einfach',
+                medium: 'Mittel',
+                hard: 'Schwer',
+                restart: 'Neu starten',
+                showAnswer: 'Lösung anzeigen',
+                testConfetti: 'Test',
+                tip: 'Tipp: Klicke auf eine Zahl neben dem leeren Feld, um sie zu verschieben.',
+                winMessage: 'Geschafft! {moves} Züge / {time}',
+                closeAlert: 'Dies ist eine Webseite. Bitte verwenden Sie den Browser, um den Tab zu schließen.',
+                minimizeAlert: 'Dies ist eine Webseite. Bitte verwenden Sie den Browser, um das Fenster zu minimieren.',
+                noteAlert: 'Spielanleitung: Klicke auf Zahlen neben dem leeren Feld, um sie in Reihenfolge zu bringen!'
+            },
+            'es': {
+                title: 'Klotski Numérico',
+                movesLabel: 'Movimientos',
+                timeLabel: 'Tiempo',
+                easy: 'Fácil',
+                medium: 'Medio',
+                hard: 'Difícil',
+                restart: 'Reiniciar',
+                showAnswer: 'Ver respuesta',
+                testConfetti: 'Test',
+                tip: 'Consejo: Haz clic en un número adyacente al espacio vacío para moverlo.',
+                winMessage: '¡Ganaste! {moves} movimientos / {time}',
+                closeAlert: 'Esta es una página web. Por favor usa el navegador para cerrar la pestaña.',
+                minimizeAlert: 'Esta es una página web. Por favor usa el navegador para minimizar la ventana.',
+                noteAlert: 'Cómo jugar: Haz clic en los números adyacentes al espacio vacío para ordenarlos!'
+            },
+            'ko': {
+                title: '숫자 화용도',
+                movesLabel: '이동 횟수',
+                timeLabel: '시간',
+                easy: '초급',
+                medium: '중급',
+                hard: '고급',
+                restart: '다시 시작',
+                showAnswer: '정답 보기',
+                testConfetti: '테스트',
+                tip: '팁: 빈 칸 옆의 숫자를 클릭하면 이동합니다.',
+                winMessage: '클리어! {moves}회 / {time}',
+                closeAlert: '이것은 웹 페이지입니다. 브라우저를 사용하여 탭을 닫으세요.',
+                minimizeAlert: '이것은 웹 페이지입니다. 브라우저를 사용하여 창을 최소화하세요.',
+                noteAlert: '플레이 방법: 빈 칸 옆의 숫자를 클릭하여 순서대로 배열하세요!'
+            }
+        };
+
+        const I18N = {
+            currentLang: 'zh-CN',
+
+            normalizeLang(lang) {
+                if (!lang) return 'zh-CN';
+                const lower = lang.toLowerCase();
+                if (lower.startsWith('zh-tw') || lower.startsWith('zh-hk') || lower.startsWith('zh-mo')) return 'zh-TW';
+                if (lower.startsWith('zh')) return 'zh-CN';
+                if (lower.startsWith('en')) return 'en';
+                if (lower.startsWith('ja')) return 'ja';
+                if (lower.startsWith('vi')) return 'vi';
+                if (lower.startsWith('fr')) return 'fr';
+                if (lower.startsWith('de')) return 'de';
+                if (lower.startsWith('es')) return 'es';
+                if (lower.startsWith('ko')) return 'ko';
+                return 'zh-CN';
+            },
+
+            t(key, vars = {}) {
+                const texts = translations[this.currentLang] || translations['zh-CN'];
+                let text = texts[key] || translations['zh-CN'][key] || key;
+                Object.keys(vars).forEach(k => {
+                    text = text.replace(`{${k}}`, vars[k]);
+                });
+                return text;
+            },
+
+            setLanguage(lang) {
+                this.currentLang = this.normalizeLang(lang);
+                localStorage.setItem('klotski-lang', this.currentLang);
+                document.getElementById('langSelect').value = this.currentLang;
+                document.documentElement.lang = this.currentLang;
+
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    el.textContent = this.t(key);
+                });
+
+                if (game) game.updateWinMessage();
+            },
+
+            async detectByIP() {
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 2000);
+                    const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+                    clearTimeout(timeout);
+                    if (!res.ok) return null;
+                    const data = await res.json();
+                    const countryLangMap = {
+                        'CN': 'zh-CN', 'TW': 'zh-TW', 'HK': 'zh-TW', 'MO': 'zh-TW',
+                        'US': 'en', 'GB': 'en', 'CA': 'en', 'AU': 'en', 'NZ': 'en',
+                        'JP': 'ja', 'VN': 'vi', 'FR': 'fr', 'DE': 'de', 'AT': 'de', 'CH': 'de',
+                        'ES': 'es', 'MX': 'es', 'AR': 'es', 'KR': 'ko'
+                    };
+                    return countryLangMap[data.country_code];
+                } catch (e) {
+                    return null;
+                }
+            },
+
+            async init() {
+                const saved = localStorage.getItem('klotski-lang');
+                if (saved && translations[saved]) {
+                    this.setLanguage(saved);
+                    return;
+                }
+
+                const browserLang = navigator.language || navigator.userLanguage || 'zh-CN';
+                let lang = this.normalizeLang(browserLang);
+
+                // 如果浏览器语言不在支持列表，尝试用 IP 定位
+                if (!translations[lang] || lang === 'zh-CN') {
+                    const ipLang = await this.detectByIP();
+                    if (ipLang) lang = ipLang;
+                }
+
+                this.setLanguage(lang);
+            }
+        };
+
+        // ================== 游戏逻辑 ==================
+        class KlotskiGame {
+            constructor() {
+                this.size = 4;
+                this.totalTiles = this.size * this.size;
+                this.board = [];
+                this.moves = 0;
+                this.timer = null;
+                this.seconds = 0;
+                this.isPlaying = false;
+                this.isShowingAnswer = false;
+                this.boardEl = document.getElementById('board');
+                this.movesEl = document.getElementById('moves');
+                this.timeEl = document.getElementById('time');
+                this.messageEl = document.getElementById('message');
+                this.moveSound = document.getElementById('moveSound');
+                this.victorySound = document.getElementById('victorySound');
+                this.tileEls = [];
+                this.shuffle();
+            }
+
+            setSize(size) {
+                this.size = size;
+                this.totalTiles = size * size;
+                document.querySelectorAll('.diff-btn').forEach(btn => {
+                    btn.classList.toggle('active', parseInt(btn.dataset.size) === size);
+                });
+                this.shuffle();
+            }
+
+            render() {
+                this.boardEl.innerHTML = '';
+                this.tileEls = [];
+                const cellW = 100 / this.size;
+                const cellH = 100 / this.size;
+
+                this.board.forEach((num, index) => {
+                    const tile = document.createElement('div');
+                    tile.className = num === 0 ? 'tile empty' : 'tile';
+                    tile.textContent = num === 0 ? '' : num;
+                    tile.style.width = `${cellW}%`;
+                    tile.style.height = `${cellH}%`;
+                    this.updateTilePosition(tile, index);
+                    if (num !== 0) {
+                        tile.onclick = () => {
+                            const currentIndex = this.tileEls.indexOf(tile);
+                            this.handleClick(currentIndex);
+                        };
+                    }
+                    this.boardEl.appendChild(tile);
+                    this.tileEls[index] = tile;
+                });
+
+                this.updateFontSize();
+            }
+
+            updateTilePosition(tile, index) {
+                const row = Math.floor(index / this.size);
+                const col = index % this.size;
+                const cellW = 100 / this.size;
+                const cellH = 100 / this.size;
+                tile.style.left = `${col * cellW}%`;
+                tile.style.top = `${row * cellH}%`;
+            }
+
+            updateFontSize() {
+                const baseSize = Math.min(22, 120 / this.size);
+                this.tileEls.forEach(tile => {
+                    if (tile) tile.style.fontSize = `clamp(10px, ${baseSize / 10}vw, ${baseSize}px)`;
+                });
+            }
+
+            getRow(index) { return Math.floor(index / this.size); }
+            getCol(index) { return index % this.size; }
+
+            canMove(index) {
+                const emptyIndex = this.board.indexOf(0);
+                const row = this.getRow(index), col = this.getCol(index);
+                const emptyRow = this.getRow(emptyIndex), emptyCol = this.getCol(emptyIndex);
+                return Math.abs(row - emptyRow) + Math.abs(col - emptyCol) === 1;
+            }
+
+            move(index) {
+                if (!this.canMove(index)) return false;
+                const emptyIndex = this.board.indexOf(0);
+
+                const clickedTile = this.tileEls[index];
+                const emptyTile = this.tileEls[emptyIndex];
+                if (clickedTile) clickedTile.classList.add('moving');
+                if (emptyTile) emptyTile.classList.add('moving');
+
+                [this.board[index], this.board[emptyIndex]] = [this.board[emptyIndex], this.board[index]];
+                [this.tileEls[index], this.tileEls[emptyIndex]] = [this.tileEls[emptyIndex], this.tileEls[index]];
+
+                this.updateTilePosition(this.tileEls[emptyIndex], emptyIndex);
+                this.updateTilePosition(this.tileEls[index], index);
+
+                setTimeout(() => {
+                    if (clickedTile) clickedTile.classList.remove('moving');
+                    if (emptyTile) emptyTile.classList.remove('moving');
+                }, 200);
+
+                this.moves++;
+                this.movesEl.textContent = this.moves;
+
+                if (this.moveSound) {
+                    this.moveSound.currentTime = 0;
+                    this.moveSound.play().catch(() => {});
+                }
+
+                if (this.isPlaying && this.checkWin()) this.win();
+                return true;
+            }
+
+            handleClick(index) {
+                if (!this.isPlaying || this.isShowingAnswer) return;
+                this.move(index);
+            }
+
+            checkWin() {
+                for (let i = 0; i < this.totalTiles - 1; i++) {
+                    if (this.board[i] !== i + 1) return false;
+                }
+                return true;
+            }
+
+            win() {
+                this.isPlaying = false;
+                this.stopTimer();
+                this.updateWinMessage();
+                this.messageEl.className = 'message win';
+                this.fireConfetti();
+            }
+
+            updateWinMessage() {
+                if (!this.isPlaying && this.checkWin()) {
+                    this.messageEl.innerHTML = I18N.t('winMessage', { moves: this.moves, time: this.formatTime(this.seconds) }).replace(/\n/g, '<br>');
+                }
+            }
+
+            fireConfetti() {
+                if (this.victorySound) {
+                    this.victorySound.currentTime = 0;
+                    this.victorySound.play().catch(() => {});
+                }
+
+                const colors = ['#e74c3c', '#f1c40f', '#2ecc71', '#3498db', '#9b59b6', '#ff6b6b', '#1abc9c', '#e67e22'];
+                const container = document.querySelector('.game-container');
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+
+                for (let i = 0; i < 150; i++) {
+                    const conf = document.createElement('div');
+                    conf.className = 'confetti';
+
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const width = 6 + Math.random() * 10;
+                    const height = 16 + Math.random() * 24;
+
+                    const peakX = -w * (0.1 + Math.random() * 0.9);
+                    const peakY = -h * (0.85 + Math.random() * 0.15);
+
+                    const driftX = (Math.random() - 0.5) * w * 0.8;
+                    const endX = peakX + driftX;
+                    const endY = h * (0.5 + Math.random() * 0.5);
+
+                    const rot1 = Math.random() * 360 - 180;
+                    const rot2 = rot1 + Math.random() * 1440 - 720;
+                    const duration = 4000 + Math.random() * 2500;
+                    const delay = Math.random() * 500;
+
+                    conf.style.background = color;
+                    conf.style.width = `${width}px`;
+                    conf.style.height = `${height}px`;
+
+                    container.appendChild(conf);
+
+                    conf.animate([
+                        { transform: 'translate(0, 0) rotate(0deg)', opacity: 1, easing: 'ease-out' },
+                        { transform: `translate(${peakX}px, ${peakY}px) rotate(${rot1}deg)`, opacity: 1, offset: 0.2, easing: 'linear' },
+                        { transform: `translate(${endX}px, ${endY}px) rotate(${rot2}deg)`, opacity: 0, offset: 1 }
+                    ], {
+                        duration: duration,
+                        delay: delay,
+                        fill: 'forwards'
+                    });
+
+                    setTimeout(() => conf.remove(), duration + delay + 100);
+                }
+            }
+
+            shuffle() {
+                this.stopTimer();
+                this.isPlaying = false;
+                this.isShowingAnswer = false;
+                this.moves = 0;
+                this.seconds = 0;
+                this.movesEl.textContent = '0';
+                this.timeEl.textContent = '00:00';
+                this.messageEl.textContent = '';
+                this.messageEl.className = 'message';
+
+                this.board = Array.from({ length: this.totalTiles }, (_, i) => i + 1);
+                this.board[this.totalTiles - 1] = 0;
+
+                let emptyIndex = this.totalTiles - 1;
+                const shuffleMoves = this.size * 300;
+                for (let i = 0; i < shuffleMoves; i++) {
+                    const neighbors = this.getNeighbors(emptyIndex);
+                    const next = neighbors[Math.floor(Math.random() * neighbors.length)];
+                    [this.board[emptyIndex], this.board[next]] = [this.board[next], this.board[emptyIndex]];
+                    emptyIndex = next;
+                }
+
+                this.render();
+                this.isPlaying = true;
+                this.startTimer();
+            }
+
+            getNeighbors(index) {
+                const row = this.getRow(index), col = this.getCol(index);
+                const neighbors = [];
+                if (row > 0) neighbors.push(index - this.size);
+                if (row < this.size - 1) neighbors.push(index + this.size);
+                if (col > 0) neighbors.push(index - 1);
+                if (col < this.size - 1) neighbors.push(index + 1);
+                return neighbors;
+            }
+
+            startTimer() {
+                this.stopTimer();
+                this.timer = setInterval(() => {
+                    this.seconds++;
+                    this.timeEl.textContent = this.formatTime(this.seconds);
+                }, 1000);
+            }
+
+            stopTimer() {
+                if (this.timer) { clearInterval(this.timer); this.timer = null; }
+            }
+
+            formatTime(seconds) {
+                const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const s = (seconds % 60).toString().padStart(2, '0');
+                return `${m}:${s}`;
+            }
+
+            showAnswer() {
+                if (this.isShowingAnswer) return;
+                this.isShowingAnswer = true;
+                this.stopTimer();
+                const current = [...this.board];
+                this.board = Array.from({ length: this.totalTiles }, (_, i) => i + 1);
+                this.board[this.totalTiles - 1] = 0;
+                this.render();
+                this.messageEl.textContent = '👀 ' + I18N.t('showAnswer') + '...';
+
+                setTimeout(() => {
+                    this.board = current;
+                    this.render();
+                    this.isShowingAnswer = false;
+                    this.messageEl.textContent = '';
+                    if (this.isPlaying) this.startTimer();
+                }, 2000);
+            }
+
+            close() { window.close(); }
+            minimize() { alert(I18N.t('minimizeAlert')); }
+            note() { alert(I18N.t('noteAlert')); }
+        }
+
+        const game = new KlotskiGame();
+        I18N.init();
+    </script>
+</body>
+</html>
