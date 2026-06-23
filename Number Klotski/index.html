@@ -6,7 +6,7 @@
 
     <!-- SEO 基础 -->
     <title>数字华容道 - 经典益智拼图游戏</title>
-    <meta name="description" content="免费在线玩数字华容道，经典益智拼图游戏。支持初级、中级、高级难度，挑战你的逻辑思维能力！">
+    <meta name="description" content="免费在线玩数字华容道，经典益智拼图游戏。支持入门、初级、中级、高级难度，挑战你的逻辑思维能力！">
     <meta name="keywords" content="数字华容道,华容道,拼图游戏,益智游戏,逻辑思维,滑动拼图,在线游戏,Klotski,15 puzzle">
     <meta name="robots" content="index, follow">
     <meta name="author" content="xxcxy-max">
@@ -51,7 +51,7 @@
         "@context": "https://schema.org",
         "@type": "VideoGame",
         "name": "数字华容道",
-        "description": "免费在线玩数字华容道，经典益智拼图游戏。支持初级、中级、高级难度。",
+        "description": "免费在线玩数字华容道，经典益智拼图游戏。支持入门、初级、中级、高级难度。",
         "url": "https://your-domain.com/",
         "image": "https://your-domain.com/background.jpg",
         "genre": ["Puzzle", "Logic", "Board Game"],
@@ -72,7 +72,32 @@
     }
     </script>
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wood: {
+                            100: '#fdf6e8',
+                            200: '#f2e6d0',
+                            300: '#e8d5b5',
+                            400: '#d4a574',
+                            500: '#c49464',
+                            600: '#b08050',
+                            700: '#8b6b4a',
+                            800: '#7d5a3a',
+                            900: '#6d4c41',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
+        /* 仅保留游戏核心样式，布局交给 Tailwind */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html, body {
@@ -80,198 +105,10 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-            background: #f5e0b8;
         }
 
-        /* ================== 场景容器 ================== */
-        .scene {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            background: url('background.jpg') no-repeat center center;
-            background-size: cover;
-            overflow: hidden;
-        }
-
-        .game-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        /* ================== 顶部底衬 ================== */
-        .top-bar {
-            position: absolute;
-            top: 2%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 76vw;
-            max-width: 720px;
-            height: 22%;
-            min-height: 120px;
-            background: rgba(255, 248, 235, 0.88);
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-            z-index: 1;
-        }
-
-        /* ================== 顶部按钮 ================== */
-        .header-btns {
-            position: absolute;
-            top: 2.8%;
-            left: 3.5%;
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-        }
-
-        .h-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: 900;
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.3);
-            transition: transform 0.1s;
-        }
-
-        .h-btn:hover { transform: scale(1.12); }
-        .h-btn.close { background: #e74c3c; }
-        .h-btn.min { background: #7ed321; }
-        .h-btn.note { background: #3498db; font-size: 16px; }
-
-        /* ================== 语言选择器 ================== */
-        .lang-selector {
-            position: absolute;
-            top: 2.8%;
-            right: 3.5%;
-            z-index: 10;
-        }
-
-        .lang-selector select {
-            padding: 6px 10px;
-            border-radius: 16px;
-            border: 2px solid rgba(180, 140, 100, 0.4);
-            background: rgba(255, 255, 255, 0.9);
-            color: #6d4c41;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            outline: none;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        /* ================== 标题区域 ================== */
-        .title-area {
-            position: absolute;
-            top: 4%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 10;
-        }
-
-        .robot {
-            width: 46px;
-            height: 46px;
-            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
-        }
-
-        .game-title {
-            font-size: clamp(20px, 3.4vw, 38px);
-            font-weight: 900;
-            color: #d35400;
-            text-shadow:
-                2px 2px 0 #fff,
-                -1px -1px 0 #fff,
-                0 2px 8px rgba(255, 140, 0, 0.4);
-            letter-spacing: 2px;
-        }
-
-        /* ================== 信息栏 ================== */
-        .info-bar {
-            position: absolute;
-            top: 13%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 40px;
-            font-size: clamp(13px, 2vw, 18px);
-            font-weight: 800;
-            color: #6d4c41;
-            z-index: 10;
-        }
-
-        /* ================== 难度选择 ================== */
-        .difficulty-selector {
-            position: absolute;
-            top: 16%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            z-index: 10;
-        }
-
-        .diff-btn {
-            padding: 8px 18px;
-            font-size: clamp(12px, 1.6vw, 16px);
-            font-weight: 800;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            color: #6d4c41;
-            background: rgba(255, 255, 255, 0.85);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-            transition: all 0.15s;
-            border: 2px solid transparent;
-        }
-
-        .diff-btn:hover {
-            transform: translateY(-2px);
-            background: #fff;
-        }
-
-        .diff-btn.active {
-            background: #ffd93d;
-            color: #8b4513;
-            border-color: #f1c40f;
-            box-shadow: 0 4px 12px rgba(241, 196, 15, 0.4);
-        }
-
-        /* ================== 主游戏板 ================== */
-        .game-board {
-            position: absolute;
-            top: 52%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70vw;
-            max-width: 85vh;
-            aspect-ratio: 16 / 10;
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            padding: 12px;
-        }
-
-        /* ================== 棋盘框架 ================== */
+        /* 棋盘彩色边框 */
         .board-frame {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            height: 100%;
             padding: 8px;
             border-radius: 16px;
             background:
@@ -334,92 +171,21 @@
             opacity: 0;
         }
 
-        /* ================== 底部底衬 ================== */
-        .bottom-bar {
-            position: absolute;
-            bottom: 6%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 76vw;
-            max-width: 720px;
-            height: 14%;
-            min-height: 80px;
-            background: rgba(255, 248, 235, 0.88);
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-            z-index: 1;
+        /* 难度按钮激活状态 */
+        .diff-btn.active {
+            background: #ffd93d !important;
+            color: #8b4513 !important;
+            border-color: #f1c40f !important;
+            box-shadow: 0 4px 12px rgba(241, 196, 15, 0.4) !important;
         }
 
-        /* ================== 底部按钮 ================== */
-        .controls {
-            position: absolute;
-            bottom: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 28px;
-            z-index: 10;
-        }
-
-        .game-btn {
-            padding: 11px 34px;
-            font-size: clamp(14px, 2.2vw, 21px);
-            font-weight: 900;
-            border: none;
-            border-radius: 28px;
-            cursor: pointer;
-            color: #fff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
-            box-shadow:
-                0 5px 0 rgba(0,0,0,0.18),
-                0 8px 16px rgba(0,0,0,0.25);
-            transition: all 0.08s;
-            position: relative;
-            top: 0;
-        }
-
-        .game-btn:active {
-            top: 4px;
-            box-shadow:
-                0 1px 0 rgba(0,0,0,0.18),
-                0 3px 8px rgba(0,0,0,0.25);
-        }
-
-        .btn-restart {
-            background: linear-gradient(180deg, #ff8585, #e74c3c);
-            border-bottom: 4px solid #c0392b;
-        }
-
-        .btn-answer {
-            background: linear-gradient(180deg, #58d5f5, #0abde3);
-            border-bottom: 4px solid #0984a3;
-        }
-
-        /* ================== 提示 ================== */
-        .tip {
-            position: absolute;
-            bottom: 7%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: clamp(10px, 1.5vw, 14px);
-            color: #6d4c41;
-            font-weight: 700;
-            z-index: 10;
-            white-space: nowrap;
-        }
-
-        /* ================== 胜利消息 ================== */
+        /* 胜利消息动画 */
         .message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             font-size: clamp(18px, 3.5vw, 34px);
             font-weight: 900;
             color: #fff;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
             text-align: center;
-            z-index: 30;
             pointer-events: none;
             white-space: nowrap;
         }
@@ -430,11 +196,11 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
-        /* ================== 通关彩条 ================== */
+        /* 通关彩条 */
         .confetti {
             position: absolute;
             width: 10px;
@@ -447,118 +213,93 @@
             background: #e74c3c;
             opacity: 0;
         }
-
-        @media (max-width: 640px) {
-            .top-bar {
-                width: 92vw;
-                height: 18%;
-                min-height: 100px;
-            }
-            .bottom-bar {
-                width: 92vw;
-                height: 12%;
-                min-height: 60px;
-            }
-            .title-area { top: 3%; }
-            .game-title { font-size: 22px; }
-            .info-bar { top: 10%; gap: 24px; font-size: 13px; }
-            .difficulty-selector { top: 14%; gap: 6px; }
-            .diff-btn { padding: 5px 10px; font-size: 11px; }
-            .game-board {
-                width: 85vw;
-                max-width: 55vh;
-            }
-            .controls { bottom: 12%; gap: 12px; }
-            .game-btn { padding: 9px 18px; font-size: 14px; }
-            .tip { bottom: 18%; font-size: 11px; }
-            .lang-selector { top: 2.5%; right: 2.5%; }
-            .lang-selector select { font-size: 11px; padding: 4px 6px; }
-        }
     </style>
 </head>
-<body>
-    <div class="scene">
-        <div class="game-container">
-            <!-- 顶部底衬 -->
-            <div class="top-bar"></div>
+<body class="bg-amber-100">
+    <div class="relative w-screen h-screen bg-cover bg-center bg-no-repeat overflow-hidden" style="background-image: url('background.jpg');">
+        <!-- 语言选择器 -->
+        <div class="absolute top-3 right-3 md:top-4 md:right-6 z-20">
+            <select id="langSelect" onchange="I18N.setLanguage(this.value)" class="px-2 py-1 md:px-3 md:py-1.5 rounded-full border-2 border-amber-300 bg-white/90 text-wood-900 text-xs md:text-sm font-bold shadow-md cursor-pointer outline-none hover:bg-white transition-colors">
+                <option value="zh-CN">简体中文</option>
+                <option value="zh-TW">繁體中文</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="es">Español</option>
+                <option value="ko">한국어</option>
+            </select>
+        </div>
 
-            <!-- 语言选择器 -->
-            <div class="lang-selector">
-                <select id="langSelect" onchange="I18N.setLanguage(this.value)">
-                    <option value="zh-CN">简体中文</option>
-                    <option value="zh-TW">繁體中文</option>
-                    <option value="en">English</option>
-                    <option value="ja">日本語</option>
-                    <option value="vi">Tiếng Việt</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
-                    <option value="es">Español</option>
-                    <option value="ko">한국어</option>
-                </select>
+        <!-- 主容器：垂直三栏布局 -->
+        <div class="relative w-full h-full flex flex-col items-center justify-between py-3 md:py-6 px-2 md:px-4">
+
+            <!-- 顶部卡片 -->
+            <div class="w-full max-w-md md:max-w-2xl bg-white/90 rounded-2xl shadow-lg p-3 md:p-4 flex flex-col items-center gap-1.5 md:gap-2 z-10">
+                <!-- 标题 -->
+                <div class="flex items-center gap-2 md:gap-3">
+                    <svg class="w-8 h-8 md:w-12 md:h-12 drop-shadow-md" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffe066;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ffb347;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <line x1="50" y1="18" x2="50" y2="5" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round" />
+                        <circle cx="50" cy="5" r="6" fill="#ff6b6b" />
+                        <rect x="12" y="38" width="10" height="18" rx="4" fill="#ff6b6b" />
+                        <rect x="78" y="38" width="10" height="18" rx="4" fill="#ff6b6b" />
+                        <rect x="25" y="20" width="50" height="42" rx="12" fill="url(#bodyGrad)" stroke="#fff" stroke-width="3" />
+                        <circle cx="40" cy="38" r="5" fill="#333" />
+                        <circle cx="60" cy="38" r="5" fill="#333" />
+                        <circle cx="42" cy="36" r="1.5" fill="#fff" />
+                        <circle cx="62" cy="36" r="1.5" fill="#fff" />
+                        <path d="M 42 50 Q 50 56 58 50" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round" />
+                        <rect x="38" y="62" width="24" height="22" rx="6" fill="#5dade2" stroke="#fff" stroke-width="2" />
+                        <circle cx="50" cy="72" r="5" fill="#fff" />
+                    </svg>
+
+                    <div class="text-xl md:text-3xl lg:text-4xl font-black text-orange-700 tracking-wide" style="text-shadow: 2px 2px 0 #fff, -1px -1px 0 #fff, 0 2px 8px rgba(255,140,0,0.4);" data-i18n="title">数字华容道</div>
+                </div>
+
+                <!-- 信息栏 -->
+                <div class="flex items-center justify-center gap-4 md:gap-8 text-sm md:text-lg font-bold text-wood-900">
+                    <span><span data-i18n="movesLabel">步数</span>：<strong id="moves">0</strong></span>
+                    <span><span data-i18n="timeLabel">时间</span>：<strong id="time">00:00</strong></span>
+                </div>
+
+                <!-- 难度选择 -->
+                <div class="difficulty-selector flex flex-wrap justify-center gap-1.5 md:gap-3 w-full">
+                    <button class="diff-btn active px-3 py-1 md:px-5 md:py-1.5 text-xs md:text-sm font-extrabold rounded-full bg-white text-wood-900 border-2 border-transparent shadow-md hover:-translate-y-0.5 hover:bg-white transition-all" data-size="3" onclick="game.setSize(3)"><span data-i18n="beginner">入门</span></button>
+                    <button class="diff-btn px-3 py-1 md:px-5 md:py-1.5 text-xs md:text-sm font-extrabold rounded-full bg-white text-wood-900 border-2 border-transparent shadow-md hover:-translate-y-0.5 hover:bg-white transition-all" data-size="4" onclick="game.setSize(4)"><span data-i18n="easy">初级</span></button>
+                    <button class="diff-btn px-3 py-1 md:px-5 md:py-1.5 text-xs md:text-sm font-extrabold rounded-full bg-white text-wood-900 border-2 border-transparent shadow-md hover:-translate-y-0.5 hover:bg-white transition-all" data-size="7" onclick="game.setSize(7)"><span data-i18n="medium">中级</span></button>
+                    <button class="diff-btn px-3 py-1 md:px-5 md:py-1.5 text-xs md:text-sm font-extrabold rounded-full bg-white text-wood-900 border-2 border-transparent shadow-md hover:-translate-y-0.5 hover:bg-white transition-all" data-size="10" onclick="game.setSize(10)"><span data-i18n="hard">高级</span></button>
+                </div>
             </div>
 
-            <!-- 标题 -->
-            <div class="title-area">
-                <svg class="robot" viewBox="0 0 100 100">
-                    <defs>
-                        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#ffe066;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#ffb347;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <line x1="50" y1="18" x2="50" y2="5" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round" />
-                    <circle cx="50" cy="5" r="6" fill="#ff6b6b" />
-                    <rect x="12" y="38" width="10" height="18" rx="4" fill="#ff6b6b" />
-                    <rect x="78" y="38" width="10" height="18" rx="4" fill="#ff6b6b" />
-                    <rect x="25" y="20" width="50" height="42" rx="12" fill="url(#bodyGrad)" stroke="#fff" stroke-width="3" />
-                    <circle cx="40" cy="38" r="5" fill="#333" />
-                    <circle cx="60" cy="38" r="5" fill="#333" />
-                    <circle cx="42" cy="36" r="1.5" fill="#fff" />
-                    <circle cx="62" cy="36" r="1.5" fill="#fff" />
-                    <path d="M 42 50 Q 50 56 58 50" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round" />
-                    <rect x="38" y="62" width="24" height="22" rx="6" fill="#5dade2" stroke="#fff" stroke-width="2" />
-                    <circle cx="50" cy="72" r="5" fill="#fff" />
-                </svg>
-
-                <div class="game-title" data-i18n="title">数字华容道</div>
-            </div>
-
-            <!-- 信息栏 -->
-            <div class="info-bar">
-                <span><span data-i18n="movesLabel">步数</span>：<strong id="moves">0</strong></span>
-                <span><span data-i18n="timeLabel">时间</span>：<strong id="time">00:00</strong></span>
-            </div>
-
-            <!-- 难度选择 -->
-            <div class="difficulty-selector">
-                <button class="diff-btn active" data-size="3" onclick="game.setSize(3)"><span data-i18n="beginner">入门</span></button>
-                <button class="diff-btn" data-size="4" onclick="game.setSize(4)"><span data-i18n="easy">初级</span></button>
-                <button class="diff-btn" data-size="7" onclick="game.setSize(7)"><span data-i18n="medium">中级</span></button>
-                <button class="diff-btn" data-size="10" onclick="game.setSize(10)"><span data-i18n="hard">高级</span></button>
-            </div>
-
-            <!-- 游戏板 -->
-            <div class="game-board">
-                <div class="board-frame">
+            <!-- 棋盘 -->
+            <div class="game-board w-[92vw] md:w-[70vw] lg:w-[60vw] max-w-[850px] aspect-[16/10] p-2 md:p-3 z-10">
+                <div class="board-frame w-full h-full">
                     <div class="board" id="board"></div>
                 </div>
             </div>
 
-            <!-- 底部底衬 -->
-            <div class="bottom-bar"></div>
+            <!-- 底部卡片 -->
+            <div class="w-full max-w-md md:max-w-2xl bg-white/90 rounded-2xl shadow-lg p-3 md:p-4 flex flex-col items-center gap-2 md:gap-3 z-10">
+                <!-- 底部按钮 -->
+                <div class="controls flex flex-wrap justify-center gap-2 md:gap-4 w-full">
+                    <button class="game-btn px-5 py-2 md:px-8 md:py-2.5 text-sm md:text-lg font-black rounded-full text-white shadow-lg active:translate-y-1 transition-all" style="background: linear-gradient(180deg, #ff8585, #e74c3c); box-shadow: 0 5px 0 #c0392b, 0 8px 16px rgba(0,0,0,0.25);" onclick="game.shuffle()"><span data-i18n="restart">重新开始</span></button>
+                    <button class="game-btn px-5 py-2 md:px-8 md:py-2.5 text-sm md:text-lg font-black rounded-full text-white shadow-lg active:translate-y-1 transition-all" style="background: linear-gradient(180deg, #58d5f5, #0abde3); box-shadow: 0 5px 0 #0984a3, 0 8px 16px rgba(0,0,0,0.25);" onclick="game.showAnswer()"><span data-i18n="showAnswer">查看答案</span></button>
+                </div>
 
-            <!-- 底部按钮 -->
-            <div class="controls">
-                <button class="game-btn btn-restart" onclick="game.shuffle()"><span data-i18n="restart">重新开始</span></button>
-                <button class="game-btn btn-answer" onclick="game.showAnswer()"><span data-i18n="showAnswer">查看答案</span></button>
+                <!-- 提示 -->
+                <div class="tip text-xs md:text-sm font-bold text-wood-900 text-center" data-i18n="tip">提示：点击空白格相邻的数字即可移动</div>
             </div>
-
-            <!-- 提示 -->
-            <div class="tip" data-i18n="tip">提示：点击空白格相邻的数字即可移动</div>
-
-            <!-- 胜利消息 -->
-            <div class="message" id="message"></div>
         </div>
+
+        <!-- 胜利消息 -->
+        <div class="message absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30" id="message"></div>
     </div>
 
     <!-- 移动音效 -->
@@ -796,7 +537,6 @@
                 const browserLang = navigator.language || navigator.userLanguage || 'zh-CN';
                 let lang = this.normalizeLang(browserLang);
 
-                // 如果浏览器语言不在支持列表，尝试用 IP 定位
                 if (!translations[lang] || lang === 'zh-CN') {
                     const ipLang = await this.detectByIP();
                     if (ipLang) lang = ipLang;
@@ -936,7 +676,7 @@
                 this.isPlaying = false;
                 this.stopTimer();
                 this.updateWinMessage();
-                this.messageEl.className = 'message win';
+                this.messageEl.className = 'message win absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30';
                 this.fireConfetti();
             }
 
@@ -953,7 +693,7 @@
                 }
 
                 const colors = ['#e74c3c', '#f1c40f', '#2ecc71', '#3498db', '#9b59b6', '#ff6b6b', '#1abc9c', '#e67e22'];
-                const container = document.querySelector('.game-container');
+                const container = document.querySelector('.game-container') || document.querySelector('.relative.w-screen');
                 const w = container.clientWidth;
                 const h = container.clientHeight;
 
@@ -1006,7 +746,7 @@
                 this.movesEl.textContent = '0';
                 this.timeEl.textContent = '00:00';
                 this.messageEl.textContent = '';
-                this.messageEl.className = 'message';
+                this.messageEl.className = 'message absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30';
 
                 this.board = Array.from({ length: this.totalTiles }, (_, i) => i + 1);
                 this.board[this.totalTiles - 1] = 0;
