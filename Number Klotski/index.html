@@ -217,12 +217,14 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
             z-index: 10;
         }
 
         .diff-btn {
-            padding: 8px 22px;
+            padding: 8px 18px;
             font-size: clamp(12px, 1.6vw, 16px);
             font-weight: 800;
             border: none;
@@ -460,8 +462,8 @@
             .title-area { top: 3%; }
             .game-title { font-size: 22px; }
             .info-bar { top: 10%; gap: 24px; font-size: 13px; }
-            .difficulty-selector { top: 14%; gap: 8px; }
-            .diff-btn { padding: 5px 12px; font-size: 12px; }
+            .difficulty-selector { top: 14%; gap: 6px; }
+            .diff-btn { padding: 5px 10px; font-size: 11px; }
             .game-board {
                 width: 85vw;
                 max-width: 55vh;
@@ -529,7 +531,8 @@
 
             <!-- 难度选择 -->
             <div class="difficulty-selector">
-                <button class="diff-btn active" data-size="4" onclick="game.setSize(4)"><span data-i18n="easy">初级</span></button>
+                <button class="diff-btn active" data-size="3" onclick="game.setSize(3)"><span data-i18n="beginner">入门</span></button>
+                <button class="diff-btn" data-size="4" onclick="game.setSize(4)"><span data-i18n="easy">初级</span></button>
                 <button class="diff-btn" data-size="7" onclick="game.setSize(7)"><span data-i18n="medium">中级</span></button>
                 <button class="diff-btn" data-size="10" onclick="game.setSize(10)"><span data-i18n="hard">高级</span></button>
             </div>
@@ -571,6 +574,7 @@
                 title: '数字华容道',
                 movesLabel: '步数',
                 timeLabel: '时间',
+                beginner: '入门',
                 easy: '初级',
                 medium: '中级',
                 hard: '高级',
@@ -587,6 +591,7 @@
                 title: '數字華容道',
                 movesLabel: '步數',
                 timeLabel: '時間',
+                beginner: '入門',
                 easy: '初級',
                 medium: '中級',
                 hard: '高級',
@@ -603,6 +608,7 @@
                 title: 'Number Klotski',
                 movesLabel: 'Moves',
                 timeLabel: 'Time',
+                beginner: 'Beginner',
                 easy: 'Easy',
                 medium: 'Medium',
                 hard: 'Hard',
@@ -619,6 +625,7 @@
                 title: '数字華容道',
                 movesLabel: '手数',
                 timeLabel: '時間',
+                beginner: '入門',
                 easy: '初級',
                 medium: '中級',
                 hard: '上級',
@@ -635,6 +642,7 @@
                 title: 'Hoa Rồng Đạo Số',
                 movesLabel: 'Số bước',
                 timeLabel: 'Thờgian',
+                beginner: 'Nhập môn',
                 easy: 'Dễ',
                 medium: 'Trung bình',
                 hard: 'Khó',
@@ -651,6 +659,7 @@
                 title: 'Klotski Numérique',
                 movesLabel: 'Coups',
                 timeLabel: 'Temps',
+                beginner: 'Débutant',
                 easy: 'Facile',
                 medium: 'Moyen',
                 hard: 'Difficile',
@@ -667,6 +676,7 @@
                 title: 'Zahlen-Klotski',
                 movesLabel: 'Züge',
                 timeLabel: 'Zeit',
+                beginner: 'Anfänger',
                 easy: 'Einfach',
                 medium: 'Mittel',
                 hard: 'Schwer',
@@ -683,6 +693,7 @@
                 title: 'Klotski Numérico',
                 movesLabel: 'Movimientos',
                 timeLabel: 'Tiempo',
+                beginner: 'Principiante',
                 easy: 'Fácil',
                 medium: 'Medio',
                 hard: 'Difícil',
@@ -699,6 +710,7 @@
                 title: '숫자 화용도',
                 movesLabel: '이동 횟수',
                 timeLabel: '시간',
+                beginner: '입문',
                 easy: '초급',
                 medium: '중급',
                 hard: '고급',
@@ -797,7 +809,7 @@
         // ================== 游戏逻辑 ==================
         class KlotskiGame {
             constructor() {
-                this.size = 4;
+                this.size = 3;
                 this.totalTiles = this.size * this.size;
                 this.board = [];
                 this.moves = 0;
@@ -1000,7 +1012,7 @@
                 this.board[this.totalTiles - 1] = 0;
 
                 let emptyIndex = this.totalTiles - 1;
-                const shuffleMoves = this.size * 300;
+                const shuffleMoves = this.size === 3 ? 15 : this.size === 4 ? 60 : this.size === 7 ? 250 : 400;
                 for (let i = 0; i < shuffleMoves; i++) {
                     const neighbors = this.getNeighbors(emptyIndex);
                     const next = neighbors[Math.floor(Math.random() * neighbors.length)];
