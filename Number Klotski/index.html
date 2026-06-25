@@ -179,6 +179,22 @@
             opacity: 0;
         }
 
+        /* 下一个目标高亮提示 */
+        .tile.next-target {
+            z-index: 3;
+            background: linear-gradient(145deg, #fff8dc, #ffeaa7);
+            animation: nextPulse 1.4s infinite;
+        }
+
+        @keyframes nextPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px #ffd700, 0 0 14px rgba(255, 215, 0, 0.55);
+            }
+            50% {
+                box-shadow: 0 0 0 6px #ffec8b, 0 0 28px rgba(255, 215, 0, 0.9);
+            }
+        }
+
         /* 难度按钮激活状态 */
         .diff-btn.active {
             background: #ffd93d !important;
@@ -785,6 +801,7 @@
                 });
 
                 this.updateFontSize();
+                this.highlightNextTile();
             }
 
             updateTilePosition(tile, index) {
@@ -801,6 +818,31 @@
                 this.tileEls.forEach(tile => {
                     if (tile) tile.style.fontSize = `clamp(10px, ${baseSize / 10}vw, ${baseSize}px)`;
                 });
+            }
+
+            highlightNextTile() {
+                // 只在 7x7 及以上棋盘启用目标高亮，减少眼花缭乱
+                if (this.size < 7) {
+                    this.tileEls.forEach(tile => tile && tile.classList.remove('next-target'));
+                    return;
+                }
+
+                // 移除旧高亮
+                this.tileEls.forEach(tile => tile && tile.classList.remove('next-target'));
+
+                // 找到第一个未归位的位置，其正确数字就是下一个目标
+                let targetNum = null;
+                for (let i = 0; i < this.totalTiles - 1; i++) {
+                    if (this.board[i] !== i + 1) {
+                        targetNum = i + 1;
+                        break;
+                    }
+                }
+                if (targetNum === null) return; // 已通关
+
+                // 高亮该数字所在 tile
+                const targetTile = this.tileEls.find(tile => tile && tile.textContent == targetNum);
+                if (targetTile) targetTile.classList.add('next-target');
             }
 
             getRow(index) { return Math.floor(index / this.size); }
@@ -840,6 +882,8 @@
                     this.moveSound.currentTime = 0;
                     this.moveSound.play().catch(() => {});
                 }
+
+                this.highlightNextTile();
 
                 if (this.isPlaying && this.checkWin()) this.win();
                 return true;
