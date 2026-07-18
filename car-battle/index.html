@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>公路战车 Car Battle</title>
+  <meta name="description" content="俯视公路竞速战斗:驾驶跑车甩开追击,机炮导弹打爆敌车,免费在线玩。">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <canvas id="game" width="480" height="640"></canvas>
+    <div class="touch-controls" id="touchControls">
+      <div class="joystick" id="joystick" aria-label="方向摇杆">
+        <div class="stick" id="stick"></div>
+      </div>
+      <div class="actions">
+        <button class="tbtn small" id="btnPause" aria-label="暂停">II</button>
+        <button class="tbtn small" id="btnMissile" aria-label="导弹">🚀</button>
+        <button class="tbtn fire" id="btnFire" aria-label="机炮">开火</button>
+      </div>
+    </div>
+    <p class="hint">← → 转向 · ↑ 加速 · ↓ 刹车 · 空格 机炮 · X 导弹 · P 暂停 · Enter 开始</p>
+    <p class="hint hint-touch">摇杆转向/油门/刹车 · 开火 机炮 · 🚀 导弹</p>
+  </div>
+  <script src="js/audio.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/entities.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
