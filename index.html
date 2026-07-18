@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- SEO 基础：默认中文，JS 会根据语言动态更新 -->
-    <title id="seoTitle">游戏大厅 - 免费在线小游戏合集</title>
-    <meta id="seoDescription" name="description" content="免费在线小游戏合集：数字华容道、坦克大战等经典益智与街机游戏，无需下载，点击即玩。">
-    <meta id="seoKeywords" name="keywords" content="在线小游戏,免费游戏,益智游戏,数字华容道,坦克大战,网页游戏,game hub,mini games">
+    <!-- SEO 基础:静态中英双语(不执行 JS 的爬虫也能索引),JS 会按用户语言动态替换为单一语言 -->
+    <title id="seoTitle">游戏大厅 Game Hub - 免费在线小游戏合集 Free Mini Games</title>
+    <meta id="seoDescription" name="description" content="免费在线小游戏合集：数字华容道、坦克大战、飞机大战等经典益智与街机游戏，无需下载，点击即玩。Free online mini games: Number Klotski, Tank Battle, Plane Battle and more classic puzzle & arcade games. No download, just play.">
+    <meta id="seoKeywords" name="keywords" content="在线小游戏,免费游戏,益智游戏,数字华容道,坦克大战,飞机大战,网页游戏,online games,free mini games,number klotski,tank battle,plane battle,browser games,game hub,mini games">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#f6f7f9">
     <link id="canonicalLink" rel="canonical" href="https://games.leonova.xyz/">
@@ -20,17 +20,18 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta id="ogUrl" property="og:url" content="https://games.leonova.xyz/">
-    <meta id="ogTitle" property="og:title" content="游戏大厅 - 免费在线小游戏合集">
-    <meta id="ogDescription" property="og:description" content="免费在线小游戏合集：数字华容道、坦克大战等经典游戏，无需下载，点击即玩。">
+    <meta id="ogTitle" property="og:title" content="游戏大厅 Game Hub - 免费在线小游戏合集 Free Mini Games">
+    <meta id="ogDescription" property="og:description" content="免费在线小游戏合集：数字华容道、坦克大战、飞机大战等经典游戏，无需下载，点击即玩。Free online mini games, no download, just play.">
     <meta property="og:image" content="https://games.leonova.xyz/klotski/preview.png">
     <meta id="ogLocale" property="og:locale" content="zh_CN">
-    <meta id="ogSiteName" property="og:site_name" content="游戏大厅">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta id="ogSiteName" property="og:site_name" content="游戏大厅 Game Hub">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta id="twitterUrl" name="twitter:url" content="https://games.leonova.xyz/">
-    <meta id="twitterTitle" name="twitter:title" content="游戏大厅 - 免费在线小游戏合集">
-    <meta id="twitterDescription" name="twitter:description" content="免费在线小游戏合集：数字华容道、坦克大战等经典游戏，无需下载，点击即玩。">
+    <meta id="twitterTitle" name="twitter:title" content="游戏大厅 Game Hub - 免费在线小游戏合集 Free Mini Games">
+    <meta id="twitterDescription" name="twitter:description" content="免费在线小游戏合集：数字华容道、坦克大战、飞机大战等经典游戏，无需下载，点击即玩。Free online mini games, no download, just play.">
     <meta name="twitter:image" content="https://games.leonova.xyz/klotski/preview.png">
 
     <!-- 结构化数据 -->
@@ -69,6 +70,18 @@
                     "url": "https://games.leonova.xyz/tank-battle/",
                     "image": "https://games.leonova.xyz/tank-battle/preview.png",
                     "genre": "Arcade",
+                    "gamePlatform": "Web Browser"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                    "@type": "VideoGame",
+                    "name": "飞机大战 Plane Battle",
+                    "url": "https://games.leonova.xyz/plane-battle/",
+                    "image": "https://games.leonova.xyz/plane-battle/preview.png",
+                    "genre": "Shooter",
                     "gamePlatform": "Web Browser"
                 }
             }
@@ -308,6 +321,20 @@
                     'en': ['Arcade', 'Shooter', 'Retro']
                 }
             },
+            {
+                id: 'plane-battle',
+                url: '/plane-battle/',
+                preview: '/plane-battle/preview.png',
+                name: { 'zh-CN': '飞机大战', 'en': 'Plane Battle' },
+                desc: {
+                    'zh-CN': '经典纵向卷轴射击，躲子弹、吃道具、放雷打 Boss，冲击最高分！',
+                    'en': 'Classic vertical shmup. Dodge bullets, grab power-ups, beat the boss!'
+                },
+                tags: {
+                    'zh-CN': ['街机', '射击', '弹幕'],
+                    'en': ['Arcade', 'Shooter', 'Bullet Hell']
+                }
+            },
             // 占位：即将上线
             {
                 id: 'coming-soon',
@@ -325,8 +352,8 @@
         const I18N = {
             'zh-CN': {
                 seoTitle: '游戏大厅 - 免费在线小游戏合集',
-                seoDescription: '免费在线小游戏合集：数字华容道、坦克大战等经典益智与街机游戏，无需下载，点击即玩。',
-                seoKeywords: '在线小游戏,免费游戏,益智游戏,数字华容道,坦克大战,网页游戏',
+                seoDescription: '免费在线小游戏合集：数字华容道、坦克大战、飞机大战等经典益智与街机游戏，无需下载，点击即玩。',
+                seoKeywords: '在线小游戏,免费游戏,益智游戏,数字华容道,坦克大战,飞机大战,网页游戏',
                 ogSiteName: '游戏大厅',
                 title: '🎮 游戏大厅',
                 subtitle: '免费在线小游戏，无需下载，点击即玩',
@@ -334,8 +361,8 @@
             },
             'en': {
                 seoTitle: 'Game Hub - Free Online Mini Games',
-                seoDescription: 'Free online mini games: Number Klotski, Tank Battle and more classic puzzle & arcade games. No download, just play.',
-                seoKeywords: 'online games,free mini games,puzzle games,number klotski,tank battle,browser games',
+                seoDescription: 'Free online mini games: Number Klotski, Tank Battle, Plane Battle and more classic puzzle & arcade games. No download, just play.',
+                seoKeywords: 'online games,free mini games,puzzle games,number klotski,tank battle,plane battle,browser games',
                 ogSiteName: 'Game Hub',
                 title: '🎮 Game Hub',
                 subtitle: 'Free online mini games. No download, just play.',

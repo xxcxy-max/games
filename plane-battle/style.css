@@ -1,0 +1,58 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #05070f;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Courier New", monospace;
+}
+
+.wrap {
+  position: relative;
+  text-align: center;
+}
+
+canvas {
+  width: min(92vw, 72vh);
+  height: auto;
+  background: #0a0e1f;
+  border: 3px solid #2a3a5f;
+  border-radius: 6px;
+}
+
+.hint {
+  color: #7f8db3;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.hint-touch { display: none; }
+
+/* 放雷按钮:仅触屏设备显示 */
+.bomb-btn {
+  display: none;
+  position: absolute;
+  right: 14px;
+  bottom: 68px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  font-size: 26px;
+  color: #eee;
+  background: rgba(60, 70, 95, 0.6);
+  border: 2px solid #4a5a80;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.bomb-btn:active { background: rgba(120, 135, 175, 0.75); }
+
+@media (pointer: coarse) {
+  .bomb-btn { display: block; }
+  .hint { display: none; }
+  .hint-touch { display: block; }
+  canvas { touch-action: none; }
+}
