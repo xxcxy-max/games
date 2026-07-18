@@ -4,12 +4,22 @@ const STATE_PLAY = 'play';
 const STATE_PAUSE = 'pause';
 const STATE_OVER = 'gameover';
 
-// 最高分存取(localStorage 可能不可用,如 Node 测试环境)
+// 本地存取(localStorage 可能不可用,如 Node 测试环境)
 function loadHiScore() {
   try { return Number(localStorage.getItem('plane-battle-hi')) || 0; } catch (e) { return 0; }
 }
 function saveHiScore(v) {
   try { localStorage.setItem('plane-battle-hi', String(v)); } catch (e) {}
+}
+function loadPlaneType() {
+  try {
+    const t = localStorage.getItem('plane-battle-plane');
+    if (t && PLANE_TYPES[t]) return t;
+  } catch (e) {}
+  return 'falcon';
+}
+function savePlaneType(t) {
+  try { localStorage.setItem('plane-battle-plane', t); } catch (e) {}
 }
 
 class Game {
@@ -19,6 +29,7 @@ class Game {
     this.state = STATE_TITLE;
     this.input = { dx: 0, dy: 0 };   // 键盘移动单位向量
     this.hiScore = loadHiScore();
+    this.planeType = loadPlaneType();
     this.noSpawn = false;            // 测试钩子:关闭随机刷怪
     this.frame = 0;
     // 三层视差星空
@@ -30,7 +41,7 @@ class Game {
   }
 
   resetWorld() {
-    this.player = new PlayerPlane();
+    this.player = new PlayerPlane(this.planeType);
     this.enemies = [];
     this.boss = null;
     this.playerBullets = [];
@@ -45,6 +56,7 @@ class Game {
     this.bossTimer = 0;
     this.bossWarn = 0;
     this.bombFlash = 0;
+    this.bombWave = null;           // 放雷冲击波 { x, y, t }
     this.shake = 0;
     this.respawnTimer = 0;
   }
@@ -52,6 +64,32 @@ class Game {
   startGame() {
     this.resetWorld();
     this.state = STATE_PLAY;
+  }
+
+  // 标题/结束界面循环切换战机
+  cyclePlane(dir) {
+    if (this.state !== STATE_TITLE && this.state !== STATE_OVER) return;
+    const keys = Object.keys(PLANE_TYPES);
+    const i = (keys.indexOf(this.planeType) + dir + keys.length) % keys.length;
+    this.planeType = keys[i];
+    savePlaneType(this.planeType);
+    this.player = new PlayerPlane(this.planeType);
+    Sound.select();
+  }
+
+  // 追踪弹目标:最近的存活敌机或 Boss
+  nearestFoe(x, y) {
+    let best = null, bd = Infinity;
+    for (const e of this.enemies) {
+      if (!e.alive) continue;
+      const d = (e.x - x) * (e.x - x) + (e.y - y) * (e.y - y);
+      if (d < bd) { bd = d; best = e; }
+    }
+    if (this.boss) {
+      const d = (this.boss.x - x) * (this.boss.x - x) + (this.boss.y - y) * (this.boss.y - y);
+      if (d < bd) best = this.boss;
+    }
+    return best;
   }
 
   // ================= 逻辑 =================
@@ -69,6 +107,7 @@ class Game {
     if (this.shake > 0) this.shake--;
     if (this.bossWarn > 0) this.bossWarn--;
     if (this.bombFlash > 0) this.bombFlash--;
+    if (this.bombWave && ++this.bombWave.t > 34) this.bombWave = null;
 
     // 玩家
     const p = this.player;
@@ -77,7 +116,7 @@ class Game {
       if (p.invincible > 0) p.invincible--;
       // 自动开火
       if (--p.fireTimer <= 0) {
-        p.fireTimer = 8;
+        p.fireTimer = p.fireInterval;
         p.fire(this);
         if (this.frame % 2 === 0) Sound.shoot(); // 射速快,隔次出声避免刺耳
       }
@@ -105,8 +144,8 @@ class Game {
     // 实体推进
     for (const e of this.enemies) e.update(this);
     if (this.boss) this.boss.update(this);
-    for (const b of this.playerBullets) b.update();
-    for (const b of this.enemyBullets) b.update();
+    for (const b of this.playerBullets) b.update(this);
+    for (const b of this.enemyBullets) b.update(this);
     for (const u of this.powerups) u.update();
     this.updateParticles();
 
@@ -128,21 +167,22 @@ class Game {
   collide() {
     const p = this.player;
 
-    // 玩家子弹 vs 敌机 / Boss
+    // 玩家子弹 vs 敌机 / Boss(穿透弹命中后不消失,同一目标只结算一次)
     for (const b of this.playerBullets) {
       if (!b.alive) continue;
       for (const e of this.enemies) {
-        if (!e.alive) continue;
+        if (!e.alive || b.hits.has(e)) continue;
         if (circleRect(b.x, b.y, b.r, e.x - e.w / 2, e.y - e.h / 2, e.w, e.h)) {
-          b.alive = false;
-          this.damageEnemy(e, 1);
-          break;
+          this.damageEnemy(e, b.damage);
+          if (b.pierce) b.hits.add(e);
+          else { b.alive = false; break; }
         }
       }
-      if (b.alive && this.boss &&
+      if (b.alive && this.boss && !b.hits.has(this.boss) &&
           circleRect(b.x, b.y, b.r, this.boss.x - this.boss.w / 2, this.boss.y - this.boss.h / 2, this.boss.w, this.boss.h)) {
-        b.alive = false;
-        this.damageBoss(1);
+        this.damageBoss(b.damage);
+        if (b.pierce) b.hits.add(this.boss);
+        else b.alive = false;
       }
     }
 
@@ -220,7 +260,7 @@ class Game {
   applyPowerUp(kind) {
     const p = this.player;
     if (kind === 'star') {
-      if (p.weapon < 3) p.weapon++;
+      if (p.weapon < 4) p.weapon++;
       else this.score += 500;       // 武器已满级,折算分数
     } else if (kind === 'bomb') {
       if (this.bombs < 5) this.bombs++;
@@ -252,12 +292,14 @@ class Game {
     }
   }
 
-  // 放雷:清空敌弹 + 全屏伤害
+  // 放雷:冲击波 + 金色粒子 + 白闪震屏,清空敌弹 + 全屏伤害
   useBomb() {
     if (this.state !== STATE_PLAY || this.bombs <= 0 || this.bombFlash > 0) return;
     this.bombs--;
-    this.bombFlash = 24;
-    this.shake = 16;
+    this.bombFlash = 20;
+    this.shake = 18;
+    this.bombWave = { x: this.player.x, y: this.player.y, t: 0 };
+    this.explode(this.player.x, this.player.y, '#ffd76e', 36);
     Sound.bomb();
     for (const b of this.enemyBullets) b.alive = false;
     for (const e of this.enemies) this.damageEnemy(e, 25);
@@ -297,12 +339,14 @@ class Game {
     for (const e of this.enemies) Sprites.enemy(ctx, e);
     if (this.boss) Sprites.boss(ctx, this.boss, this.frame);
     // 子弹
-    for (const b of this.playerBullets) Sprites.bulletPlayer(ctx, b);
+    for (const b of this.playerBullets) Sprites.bulletPlayer(ctx, b, this.frame);
     for (const b of this.enemyBullets) Sprites.bulletEnemy(ctx, b, this.frame);
     // 玩家(无敌时闪烁 + 保护罩)
     const p = this.player;
     if (p.alive) {
-      if (p.invincible <= 0 || (this.frame >> 2) % 2 === 0) Sprites.player(ctx, p.x, p.y, this.frame);
+      if (p.invincible <= 0 || (this.frame >> 2) % 2 === 0) {
+        Sprites.playerPlane(ctx, p.type, p.x, p.y, this.frame);
+      }
       if (p.invincible > 0) Sprites.shield(ctx, p.x, p.y, this.frame);
     }
     // 爆炸粒子
@@ -313,9 +357,25 @@ class Game {
     }
     ctx.globalAlpha = 1;
 
+    // 放雷冲击波:金/青双色扩散环
+    if (this.bombWave) {
+      const w = this.bombWave;
+      const r = w.t * 20;
+      const a = Math.max(0, 1 - w.t / 34);
+      ctx.strokeStyle = `rgba(255,214,110,${a})`;
+      ctx.lineWidth = Math.max(1, 8 - w.t * 0.2);
+      ctx.beginPath();
+      ctx.arc(w.x, w.y, r, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = `rgba(140,220,255,${a * 0.8})`;
+      ctx.lineWidth = Math.max(1, 5 - w.t * 0.12);
+      ctx.beginPath();
+      ctx.arc(w.x, w.y, r * 0.72, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     // 放雷白闪
     if (this.bombFlash > 0) {
-      ctx.fillStyle = `rgba(255,255,255,${(this.bombFlash / 24) * 0.55})`;
+      ctx.fillStyle = `rgba(255,255,255,${(this.bombFlash / 20) * 0.55})`;
       ctx.fillRect(-8, -8, FIELD_W + 16, FIELD_H + 16);
     }
     ctx.restore();
@@ -354,8 +414,8 @@ class Game {
       ctx.fillRect(x, 34, bw * Math.max(0, this.boss.hp / this.boss.maxHp), 7);
     }
 
-    // 命数图标(左下)与武器等级
-    for (let i = 0; i < this.lives; i++) Sprites.miniPlane(ctx, 22 + i * 24, FIELD_H - 22);
+    // 命数图标(左下,跟随当前机型)与武器等级
+    for (let i = 0; i < this.lives; i++) Sprites.miniPlane(ctx, 22 + i * 24, FIELD_H - 22, this.player.type);
     ctx.textAlign = 'left';
     ctx.fillStyle = '#9fb2d8';
     ctx.font = '12px "Courier New", monospace';
@@ -374,19 +434,39 @@ class Game {
     this._dim(ctx, 0.55);
     ctx.textAlign = 'center';
     ctx.fillStyle = '#8fe3ff';
-    ctx.font = 'bold 52px "Courier New", monospace';
-    ctx.fillText('飞机大战', FIELD_W / 2, 200);
+    ctx.font = 'bold 46px "Courier New", monospace';
+    ctx.fillText('飞机大战', FIELD_W / 2, 130);
     ctx.fillStyle = '#3f7fae';
+    ctx.font = 'bold 17px "Courier New", monospace';
+    ctx.fillText('P L A N E   B A T T L E', FIELD_W / 2, 162);
+
+    // 战机选择:← → 键或点击画面两侧切换
+    ctx.save();
+    ctx.translate(FIELD_W / 2, 268);
+    ctx.scale(1.6, 1.6);
+    Sprites.playerPlane(ctx, this.planeType, 0, 0, this.frame);
+    ctx.restore();
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.beginPath();
+    ctx.moveTo(100, 268); ctx.lineTo(122, 255); ctx.lineTo(122, 281); ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(FIELD_W - 100, 268); ctx.lineTo(FIELD_W - 122, 255); ctx.lineTo(FIELD_W - 122, 281); ctx.closePath();
+    ctx.fill();
+    const t = PLANE_TYPES[this.planeType];
+    ctx.fillStyle = '#ffd76e';
     ctx.font = 'bold 20px "Courier New", monospace';
-    ctx.fillText('P L A N E   B A T T L E', FIELD_W / 2, 238);
-    Sprites.player(ctx, FIELD_W / 2, 330, this.frame);
+    ctx.fillText(t.name, FIELD_W / 2, 348);
     ctx.fillStyle = '#c8d6f0';
+    ctx.font = '14px "Courier New", monospace';
+    ctx.fillText(t.desc, FIELD_W / 2, 372);
+
     ctx.font = '15px "Courier New", monospace';
-    ctx.fillText('方向键 / WASD / 拖动 移动 · 自动开火', FIELD_W / 2, 430);
-    ctx.fillText('B 放雷 · P 暂停', FIELD_W / 2, 456);
+    ctx.fillText('方向键 / WASD / 拖动 移动 · 自动开火', FIELD_W / 2, 428);
+    ctx.fillText('B 放雷 · P 暂停 · ← → 选战机', FIELD_W / 2, 454);
     if (this.hiScore > 0) {
       ctx.fillStyle = '#ffd76e';
-      ctx.fillText(`最高分 ${this.hiScore}`, FIELD_W / 2, 496);
+      ctx.fillText(`最高分 ${this.hiScore}`, FIELD_W / 2, 494);
     }
     if ((this.frame >> 4) % 2 === 0) {
       ctx.fillStyle = '#ffffff';

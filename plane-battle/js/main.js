@@ -33,6 +33,11 @@ function updateVector() {
 
 window.addEventListener('keydown', (e) => {
   Sound.ensure();
+  // 标题/结束界面:← → 选战机
+  if (game.state === STATE_TITLE || game.state === STATE_OVER) {
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') { game.cyclePlane(-1); e.preventDefault(); return; }
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') { game.cyclePlane(1); e.preventDefault(); return; }
+  }
   if (e.code in KEY_MAP) {
     held.add(KEY_MAP[e.code]);
     updateVector();
@@ -57,6 +62,11 @@ window.addEventListener('keyup', (e) => {
 // 飞机定位在触点上方,避免被手指遮挡(shmup 标配手感)
 let dragging = false;
 
+function canvasX(e) {
+  const rect = canvas.getBoundingClientRect();
+  return (e.clientX - rect.left) * (FIELD_W / rect.width);
+}
+
 function dragTo(e) {
   const rect = canvas.getBoundingClientRect();
   const x = (e.clientX - rect.left) * (FIELD_W / rect.width);
@@ -67,7 +77,15 @@ function dragTo(e) {
 canvas.addEventListener('pointerdown', (e) => {
   e.preventDefault();
   Sound.ensure();
-  if (game.state === STATE_TITLE || game.state === STATE_OVER) { tryStart(); return; }
+  // 标题界面:点左右两侧选战机,点中间开始
+  if (game.state === STATE_TITLE) {
+    const x = canvasX(e);
+    if (x < 150) { game.cyclePlane(-1); return; }
+    if (x > FIELD_W - 150) { game.cyclePlane(1); return; }
+    tryStart();
+    return;
+  }
+  if (game.state === STATE_OVER) { tryStart(); return; }
   dragging = true;
   canvas.setPointerCapture(e.pointerId);
   dragTo(e);
@@ -83,8 +101,12 @@ document.getElementById('btnBomb').addEventListener('click', () => {
 });
 
 // ?demo 直接开局,用于预览截图/演示;?demo=秒数 会先同步快进相应时长
-const demoSec = new URLSearchParams(location.search).get('demo');
+// 可选 &plane=apache|phantom|falcon 指定战机
+const params = new URLSearchParams(location.search);
+const demoSec = params.get('demo');
 if (demoSec !== null) {
+  const plane = params.get('plane');
+  if (plane && PLANE_TYPES[plane]) game.planeType = plane;
   game.startGame();
   const ff = Math.max(0, Math.min(120, parseFloat(demoSec) || 0));
   for (let i = 0; i < ff * 60; i++) {

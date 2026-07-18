@@ -24,8 +24,15 @@ function flashOverlay(ctx, w, h) {
 }
 
 const Sprites = {
-  // 玩家战机:青色喷气式(朝上),(x,y) 为中心,frame 用于尾焰闪烁
-  player(ctx, x, y, frame) {
+  // 玩家战机统一入口:按机型分发,(x,y) 为中心,frame 用于动效
+  playerPlane(ctx, type, x, y, frame) {
+    if (type === 'apache') this.apache(ctx, x, y, frame);
+    else if (type === 'phantom') this.phantom(ctx, x, y, frame);
+    else this.falcon(ctx, x, y, frame);
+  },
+
+  // 猎鹰:青色喷气式(朝上)
+  falcon(ctx, x, y, frame) {
     ctx.save();
     ctx.translate(x, y);
     // 尾焰
@@ -70,6 +77,108 @@ const Sprites = {
     ctx.beginPath();
     ctx.ellipse(0, -6, 2.8, 6, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
+  },
+
+  // 阿帕奇:军绿武装直升机(朝上),旋翼随帧转动
+  apache(ctx, x, y, frame) {
+    ctx.save();
+    ctx.translate(x, y);
+    // 尾梁与尾翼(机尾朝下)
+    ctx.fillStyle = '#3d5230';
+    ctx.fillRect(-2.5, 4, 5, 18);
+    ctx.fillRect(-8, 17, 16, 3);
+    // 尾桨
+    ctx.save();
+    ctx.translate(4, 21);
+    ctx.rotate(frame * 0.9);
+    ctx.strokeStyle = 'rgba(220,230,220,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(-4, 0); ctx.lineTo(4, 0);
+    ctx.moveTo(0, -4); ctx.lineTo(0, 4);
+    ctx.stroke();
+    ctx.restore();
+    // 短翼与武器挂架
+    ctx.fillStyle = '#4a6339';
+    ctx.fillRect(-19, -2, 38, 5);
+    ctx.fillStyle = '#2c3d22';
+    ctx.fillRect(-16, 3, 7, 6);
+    ctx.fillRect(9, 3, 7, 6);
+    // 机身
+    const bg = ctx.createLinearGradient(0, -18, 0, 10);
+    bg.addColorStop(0, '#6d8a54');
+    bg.addColorStop(0.5, '#4a6339');
+    bg.addColorStop(1, '#32451f');
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.moveTo(0, -18);
+    ctx.quadraticCurveTo(8, -12, 7, 6);
+    ctx.lineTo(-7, 6);
+    ctx.quadraticCurveTo(-8, -12, 0, -18);
+    ctx.fill();
+    // 座舱玻璃
+    ctx.fillStyle = 'rgba(210,235,255,0.9)';
+    ctx.beginPath();
+    ctx.ellipse(0, -9, 3.4, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // 机腹机炮
+    ctx.fillStyle = '#222a1a';
+    ctx.fillRect(-1.5, -2, 3, 9);
+    // 主旋翼(旋转残影)
+    ctx.fillStyle = '#2c3d22';
+    ctx.fillRect(-1.5, -24, 3, 8); // 旋翼桅杆
+    ctx.save();
+    ctx.translate(0, -24);
+    ctx.rotate(frame * 0.7);
+    ctx.strokeStyle = 'rgba(225,235,225,0.55)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(-23, 0); ctx.lineTo(23, 0);
+    ctx.moveTo(0, -23); ctx.lineTo(0, 23);
+    ctx.stroke();
+    ctx.restore();
+    ctx.restore();
+  },
+
+  // 幻影:紫色飞翼(朝上),引擎辉光呼吸
+  phantom(ctx, x, y, frame) {
+    ctx.save();
+    ctx.translate(x, y);
+    // 飞翼
+    const wg = ctx.createLinearGradient(0, -14, 0, 15);
+    wg.addColorStop(0, '#7b4fc0');
+    wg.addColorStop(0.6, '#5b3a8e');
+    wg.addColorStop(1, '#3a2360');
+    ctx.fillStyle = wg;
+    ctx.beginPath();
+    ctx.moveTo(0, -16);
+    ctx.lineTo(-23, 13);
+    ctx.lineTo(-12, 13);
+    ctx.lineTo(-7, 9);
+    ctx.lineTo(0, 13);
+    ctx.lineTo(7, 9);
+    ctx.lineTo(12, 13);
+    ctx.lineTo(23, 13);
+    ctx.closePath();
+    ctx.fill();
+    // 中央脊
+    ctx.fillStyle = '#8f63d8';
+    ctx.beginPath();
+    ctx.moveTo(0, -16);
+    ctx.quadraticCurveTo(5, -4, 4, 10);
+    ctx.lineTo(-4, 10);
+    ctx.quadraticCurveTo(-5, -4, 0, -16);
+    ctx.fill();
+    // 座舱
+    ctx.fillStyle = 'rgba(240,220,255,0.95)';
+    ctx.beginPath();
+    ctx.ellipse(0, -5, 2.4, 4.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // 引擎辉光
+    ctx.fillStyle = `rgba(200,130,255,${0.55 + Math.sin(frame / 3) * 0.25})`;
+    ctx.fillRect(-11, 12.5, 7, 2.5);
+    ctx.fillRect(4, 12.5, 7, 2.5);
     ctx.restore();
   },
 
@@ -218,14 +327,80 @@ const Sprites = {
     ctx.restore();
   },
 
-  // 玩家子弹:青色光弹
-  bulletPlayer(ctx, b) {
+  // 玩家子弹:按弹种分发
+  bulletPlayer(ctx, b, frame) {
+    if (b.kind === 'missile') this._missile(ctx, b, frame);
+    else if (b.kind === 'wave') this._wave(ctx, b, frame);
+    else if (b.kind === 'tracer') this._tracer(ctx, b);
+    else this._bolt(ctx, b);
+  },
+
+  // 猎鹰光弹:青色
+  _bolt(ctx, b) {
     ctx.save();
     ctx.translate(b.x, b.y);
     ctx.fillStyle = 'rgba(110,225,255,0.35)';
     ctx.fillRect(-3, -8, 6, 16);
     ctx.fillStyle = '#bdf3ff';
     ctx.fillRect(-1.5, -6, 3, 12);
+    ctx.restore();
+  },
+
+  // 阿帕奇机炮:黄色曳光短弹
+  _tracer(ctx, b) {
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    ctx.fillStyle = 'rgba(255,210,90,0.4)';
+    ctx.fillRect(-2.5, -6, 5, 12);
+    ctx.fillStyle = '#ffe9a8';
+    ctx.fillRect(-1, -4, 2, 8);
+    ctx.restore();
+  },
+
+  // 追踪导弹:银色弹体 + 尾焰,朝速度方向旋转
+  _missile(ctx, b, frame) {
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    ctx.rotate(Math.atan2(b.vy, b.vx) + Math.PI / 2);
+    // 尾焰
+    const flame = 4 + (frame % 3) * 2;
+    ctx.fillStyle = 'rgba(255,150,60,0.85)';
+    ctx.beginPath();
+    ctx.moveTo(-2, 7);
+    ctx.lineTo(2, 7);
+    ctx.lineTo(0, 7 + flame + 3);
+    ctx.closePath();
+    ctx.fill();
+    // 弹体
+    ctx.fillStyle = '#d8dde6';
+    ctx.fillRect(-2.5, -6, 5, 13);
+    ctx.fillStyle = '#e05555';
+    ctx.beginPath();
+    ctx.moveTo(-2.5, -6);
+    ctx.lineTo(2.5, -6);
+    ctx.lineTo(0, -11);
+    ctx.closePath();
+    ctx.fill();
+    // 弹翼
+    ctx.fillStyle = '#8a93a6';
+    ctx.fillRect(-5, 3, 10, 2.5);
+    ctx.restore();
+  },
+
+  // 幻影波弹:紫色脉动光环
+  _wave(ctx, b, frame) {
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    const r = b.r + Math.sin(frame / 4) * 0.8;
+    ctx.fillStyle = 'rgba(170,95,255,0.4)';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, r * 0.75, r * 1.3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#d0a0ff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, r * 0.5, r * 1.05, 0, 0, Math.PI * 2);
+    ctx.stroke();
     ctx.restore();
   },
 
@@ -306,12 +481,12 @@ const Sprites = {
     ctx.restore();
   },
 
-  // HUD 命数小图标
-  miniPlane(ctx, x, y) {
+  // HUD 命数小图标(跟随当前机型)
+  miniPlane(ctx, x, y, type) {
     ctx.save();
     ctx.translate(x, y);
     ctx.scale(0.42, 0.42);
-    this.player(ctx, 0, 0, 0);
+    this.playerPlane(ctx, type, 0, 0, 0);
     ctx.restore();
   },
 

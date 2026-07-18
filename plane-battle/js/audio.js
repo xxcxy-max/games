@@ -42,6 +42,8 @@ const Sound = {
   },
 
   shoot() { this.beep(720, 0.05, 'square', 0.018); },
+  missile() { this.noise(0.12, 0.05); },
+  select() { this.beep(880, 0.05, 'square', 0.04); },
   enemyDown() { this.noise(0.18, 0.1); },
   playerDown() { this.noise(0.5, 0.2); this.beep(160, 0.4, 'sawtooth', 0.08); },
   powerup() { this.beep(660, 0.08, 'square', 0.05); this.beep(990, 0.1, 'square', 0.05, 0.08); },
