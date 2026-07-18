@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>游戏大厅 - 免费在线小游戏合集</title>
+    <meta name="description" content="免费在线小游戏合集：数字华容道等经典益智游戏，无需下载，点击即玩。">
+    <meta name="keywords" content="在线小游戏,免费游戏,益智游戏,数字华容道,网页游戏">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#f6f7f9">
+    <link rel="canonical" href="https://games.leonova.xyz/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://games.leonova.xyz/">
+    <meta property="og:title" content="游戏大厅 - 免费在线小游戏合集">
+    <meta property="og:description" content="免费在线小游戏合集：数字华容道等经典益智游戏，无需下载，点击即玩。">
+    <meta property="og:image" content="https://games.leonova.xyz/klotski/preview.png">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                         "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f6f7f9;
+            color: #1f2430;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 28px 24px 8px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #8a93a6;
+        }
+
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 24px 24px 48px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            display: block;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 2px 8px rgba(31, 36, 48, 0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(31, 36, 48, 0.14);
+        }
+
+        .card .thumb {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: #eceef2;
+        }
+
+        .card .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover .thumb img {
+            transform: scale(1.06);
+        }
+
+        .card .thumb .play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(31, 36, 48, 0);
+            transition: background 0.25s ease;
+        }
+
+        .card .thumb .play span {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #1f2430;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover .thumb .play { background: rgba(31, 36, 48, 0.25); }
+        .card:hover .thumb .play span { opacity: 1; transform: scale(1); }
+
+        .card .info {
+            padding: 16px 18px 18px;
+        }
+
+        .card .info h2 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .card .info p {
+            margin-top: 6px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #8a93a6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card .tags {
+            margin-top: 10px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .card .tags span {
+            font-size: 11px;
+            color: #6b7280;
+            background: #f0f2f5;
+            border-radius: 999px;
+            padding: 3px 10px;
+        }
+
+        .card.soon {
+            pointer-events: none;
+        }
+
+        .card.soon .thumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #c4cad6;
+            background: repeating-linear-gradient(
+                45deg, #f0f2f5, #f0f2f5 12px, #e9ecf1 12px, #e9ecf1 24px
+            );
+        }
+
+        footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #aab2c0;
+        }
+
+        @media (max-width: 480px) {
+            header h1 { font-size: 22px; }
+            main { padding: 16px 16px 40px; }
+            .grid { gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">🎮 游戏大厅</h1>
+        <p data-i18n="subtitle">免费在线小游戏，无需下载，点击即玩</p>
+    </header>
+
+    <main>
+        <div class="grid" id="gameGrid"></div>
+    </main>
+
+    <footer>games.leonova.xyz</footer>
+
+    <script>
+        // ============ 游戏列表：新增游戏只需在此追加一项 ============
+        const GAMES = [
+            {
+                id: 'klotski',
+                url: '/klotski/',
+                preview: '/klotski/preview.png',
+                name: { 'zh': '数字华容道', 'en': 'Number Klotski' },
+                desc: {
+                    'zh': '经典数字滑动拼图，3x3 到 10x10 多种难度，锻炼逻辑思维。',
+                    'en': 'Classic sliding number puzzle. Multiple difficulties from 3x3 to 10x10.'
+                },
+                tags: {
+                    'zh': ['益智', '拼图', '单人'],
+                    'en': ['Puzzle', 'Sliding', 'Solo']
+                }
+            },
+            // 占位：即将上线
+            {
+                id: 'coming-soon',
+                soon: true,
+                name: { 'zh': '更多游戏', 'en': 'More Games' },
+                desc: {
+                    'zh': '敬请期待，更多有趣的小游戏正在路上……',
+                    'en': 'Stay tuned. More fun games are on the way...'
+                },
+                tags: { 'zh': ['即将上线'], 'en': ['Coming Soon'] }
+            }
+        ];
+
+        const I18N = {
+            'zh': { title: '🎮 游戏大厅', subtitle: '免费在线小游戏，无需下载，点击即玩' },
+            'en': { title: '🎮 Game Hub', subtitle: 'Free online mini games. No download, just play.' }
+        };
+
+        const lang = (navigator.language || 'zh').toLowerCase().startsWith('zh') ? 'zh' : 'en';
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            el.textContent = I18N[lang][el.dataset.i18n];
+        });
+        document.title = lang === 'zh'
+            ? '游戏大厅 - 免费在线小游戏合集'
+            : 'Game Hub - Free Online Mini Games';
+
+        const grid = document.getElementById('gameGrid');
+
+        GAMES.forEach(game => {
+            const card = document.createElement('a');
+            card.className = 'card' + (game.soon ? ' soon' : '');
+            card.href = game.soon ? '#' : game.url;
+
+            const thumb = game.soon
+                ? `<div class="thumb">🚧</div>`
+                : `<div class="thumb">
+                       <img src="${game.preview}" alt="${game.name[lang]}" loading="lazy">
+                       <div class="play"><span>▶</span></div>
+                   </div>`;
+
+            const tags = (game.tags[lang] || [])
+                .map(t => `<span>${t}</span>`).join('');
+
+            card.innerHTML = `
+                ${thumb}
+                <div class="info">
+                    <h2>${game.name[lang]}</h2>
+                    <p>${game.desc[lang]}</p>
+                    <div class="tags">${tags}</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>
