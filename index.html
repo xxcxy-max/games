@@ -4,18 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>游戏大厅 - 免费在线小游戏合集</title>
-    <meta name="description" content="免费在线小游戏合集：数字华容道等经典益智游戏，无需下载，点击即玩。">
-    <meta name="keywords" content="在线小游戏,免费游戏,益智游戏,数字华容道,网页游戏">
+    <!-- SEO 基础：默认中文，JS 会根据语言动态更新 -->
+    <title id="seoTitle">游戏大厅 - 免费在线小游戏合集</title>
+    <meta id="seoDescription" name="description" content="免费在线小游戏合集：数字华容道、坦克大战等经典益智与街机游戏，无需下载，点击即玩。">
+    <meta id="seoKeywords" name="keywords" content="在线小游戏,免费游戏,益智游戏,数字华容道,坦克大战,网页游戏,game hub,mini games">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#f6f7f9">
-    <link rel="canonical" href="https://games.leonova.xyz/">
+    <link id="canonicalLink" rel="canonical" href="https://games.leonova.xyz/">
 
+    <!-- 多语言 alternate -->
+    <link rel="alternate" hreflang="zh-CN" href="https://games.leonova.xyz/?lang=zh-CN">
+    <link rel="alternate" hreflang="en" href="https://games.leonova.xyz/?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://games.leonova.xyz/">
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://games.leonova.xyz/">
-    <meta property="og:title" content="游戏大厅 - 免费在线小游戏合集">
-    <meta property="og:description" content="免费在线小游戏合集：数字华容道等经典益智游戏，无需下载，点击即玩。">
+    <meta id="ogUrl" property="og:url" content="https://games.leonova.xyz/">
+    <meta id="ogTitle" property="og:title" content="游戏大厅 - 免费在线小游戏合集">
+    <meta id="ogDescription" property="og:description" content="免费在线小游戏合集：数字华容道、坦克大战等经典游戏，无需下载，点击即玩。">
     <meta property="og:image" content="https://games.leonova.xyz/klotski/preview.png">
+    <meta id="ogLocale" property="og:locale" content="zh_CN">
+    <meta id="ogSiteName" property="og:site_name" content="游戏大厅">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta id="twitterUrl" name="twitter:url" content="https://games.leonova.xyz/">
+    <meta id="twitterTitle" name="twitter:title" content="游戏大厅 - 免费在线小游戏合集">
+    <meta id="twitterDescription" name="twitter:description" content="免费在线小游戏合集：数字华容道、坦克大战等经典游戏，无需下载，点击即玩。">
+    <meta name="twitter:image" content="https://games.leonova.xyz/klotski/preview.png">
+
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Game Hub 游戏大厅",
+        "url": "https://games.leonova.xyz/",
+        "inLanguage": ["zh-CN", "en"]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                    "@type": "VideoGame",
+                    "name": "数字华容道 Number Klotski",
+                    "url": "https://games.leonova.xyz/klotski/",
+                    "image": "https://games.leonova.xyz/klotski/preview.png",
+                    "genre": "Puzzle",
+                    "gamePlatform": "Web Browser"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                    "@type": "VideoGame",
+                    "name": "坦克大战 Tank Battle",
+                    "url": "https://games.leonova.xyz/tank-battle/",
+                    "image": "https://games.leonova.xyz/tank-battle/preview.png",
+                    "genre": "Arcade",
+                    "gamePlatform": "Web Browser"
+                }
+            }
+        ]
+    }
+    </script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,8 +89,25 @@
             flex-direction: column;
         }
 
+        .topbar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 16px 24px 0;
+        }
+
+        .lang-select {
+            font-size: 13px;
+            color: #6b7280;
+            background: #fff;
+            border: 1px solid #e2e6ec;
+            border-radius: 999px;
+            padding: 6px 12px;
+            cursor: pointer;
+            outline: none;
+        }
+
         header {
-            padding: 28px 24px 8px;
+            padding: 12px 24px 8px;
             text-align: center;
         }
 
@@ -125,14 +201,9 @@
         .card:hover .thumb .play { background: rgba(31, 36, 48, 0.25); }
         .card:hover .thumb .play span { opacity: 1; transform: scale(1); }
 
-        .card .info {
-            padding: 16px 18px 18px;
-        }
+        .card .info { padding: 16px 18px 18px; }
 
-        .card .info h2 {
-            font-size: 17px;
-            font-weight: 600;
-        }
+        .card .info h2 { font-size: 17px; font-weight: 600; }
 
         .card .info p {
             margin-top: 6px;
@@ -160,9 +231,7 @@
             padding: 3px 10px;
         }
 
-        .card.soon {
-            pointer-events: none;
-        }
+        .card.soon { pointer-events: none; }
 
         .card.soon .thumb {
             display: flex;
@@ -190,6 +259,13 @@
     </style>
 </head>
 <body>
+    <div class="topbar">
+        <select class="lang-select" id="langSelect" aria-label="Language">
+            <option value="zh-CN">简体中文</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+
     <header>
         <h1 data-i18n="title">🎮 游戏大厅</h1>
         <p data-i18n="subtitle">免费在线小游戏，无需下载，点击即玩</p>
@@ -208,13 +284,13 @@
                 id: 'klotski',
                 url: '/klotski/',
                 preview: '/klotski/preview.png',
-                name: { 'zh': '数字华容道', 'en': 'Number Klotski' },
+                name: { 'zh-CN': '数字华容道', 'en': 'Number Klotski' },
                 desc: {
-                    'zh': '经典数字滑动拼图，3x3 到 10x10 多种难度，锻炼逻辑思维。',
+                    'zh-CN': '经典数字滑动拼图，3x3 到 10x10 多种难度，锻炼逻辑思维。',
                     'en': 'Classic sliding number puzzle. Multiple difficulties from 3x3 to 10x10.'
                 },
                 tags: {
-                    'zh': ['益智', '拼图', '单人'],
+                    'zh-CN': ['益智', '拼图', '单人'],
                     'en': ['Puzzle', 'Sliding', 'Solo']
                 }
             },
@@ -222,13 +298,13 @@
                 id: 'tank-battle',
                 url: '/tank-battle/',
                 preview: '/tank-battle/preview.png',
-                name: { 'zh': '坦克大战', 'en': 'Tank Battle' },
+                name: { 'zh-CN': '坦克大战', 'en': 'Tank Battle' },
                 desc: {
-                    'zh': '经典 FC 坦克大战复刻版，消灭敌方坦克，保卫你的基地！',
+                    'zh-CN': '经典 FC 坦克大战复刻版，消灭敌方坦克，保卫你的基地！',
                     'en': 'Classic Battle City remake. Destroy enemy tanks and defend your base!'
                 },
                 tags: {
-                    'zh': ['街机', '射击', '复古'],
+                    'zh-CN': ['街机', '射击', '复古'],
                     'en': ['Arcade', 'Shooter', 'Retro']
                 }
             },
@@ -236,57 +312,162 @@
             {
                 id: 'coming-soon',
                 soon: true,
-                name: { 'zh': '更多游戏', 'en': 'More Games' },
+                name: { 'zh-CN': '更多游戏', 'en': 'More Games' },
                 desc: {
-                    'zh': '敬请期待，更多有趣的小游戏正在路上……',
+                    'zh-CN': '敬请期待，更多有趣的小游戏正在路上……',
                     'en': 'Stay tuned. More fun games are on the way...'
                 },
-                tags: { 'zh': ['即将上线'], 'en': ['Coming Soon'] }
+                tags: { 'zh-CN': ['即将上线'], 'en': ['Coming Soon'] }
             }
         ];
 
+        // ============ 多语言 ============
         const I18N = {
-            'zh': { title: '🎮 游戏大厅', subtitle: '免费在线小游戏，无需下载，点击即玩' },
-            'en': { title: '🎮 Game Hub', subtitle: 'Free online mini games. No download, just play.' }
+            'zh-CN': {
+                seoTitle: '游戏大厅 - 免费在线小游戏合集',
+                seoDescription: '免费在线小游戏合集：数字华容道、坦克大战等经典益智与街机游戏，无需下载，点击即玩。',
+                seoKeywords: '在线小游戏,免费游戏,益智游戏,数字华容道,坦克大战,网页游戏',
+                ogSiteName: '游戏大厅',
+                title: '🎮 游戏大厅',
+                subtitle: '免费在线小游戏，无需下载，点击即玩',
+                ogLocale: 'zh_CN'
+            },
+            'en': {
+                seoTitle: 'Game Hub - Free Online Mini Games',
+                seoDescription: 'Free online mini games: Number Klotski, Tank Battle and more classic puzzle & arcade games. No download, just play.',
+                seoKeywords: 'online games,free mini games,puzzle games,number klotski,tank battle,browser games',
+                ogSiteName: 'Game Hub',
+                title: '🎮 Game Hub',
+                subtitle: 'Free online mini games. No download, just play.',
+                ogLocale: 'en_US'
+            }
         };
 
-        const lang = (navigator.language || 'zh').toLowerCase().startsWith('zh') ? 'zh' : 'en';
-        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        const SUPPORTED_LANGS = Object.keys(I18N);
+        const BASE_URL = 'https://games.leonova.xyz/';
 
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            el.textContent = I18N[lang][el.dataset.i18n];
+        const i18n = {
+            currentLang: 'zh-CN',
+
+            normalizeLang(lang) {
+                if (!lang) return null;
+                if (SUPPORTED_LANGS.includes(lang)) return lang;
+                const lower = lang.toLowerCase();
+                if (lower.startsWith('zh')) return 'zh-CN';
+                if (lower.startsWith('en')) return 'en';
+                return null;
+            },
+
+            detect() {
+                // 1. URL 参数
+                try {
+                    const urlLang = new URLSearchParams(window.location.search).get('lang');
+                    const normalized = this.normalizeLang(urlLang);
+                    if (normalized) return normalized;
+                } catch (e) {}
+                // 2. localStorage
+                const saved = this.normalizeLang(localStorage.getItem('hub-lang'));
+                if (saved) return saved;
+                // 3. 浏览器语言
+                return this.normalizeLang(navigator.language) || 'zh-CN';
+            },
+
+            t(key) {
+                return I18N[this.currentLang][key] || key;
+            },
+
+            setUrlLang() {
+                try {
+                    const url = new URL(window.location.href);
+                    if (this.currentLang === 'zh-CN') {
+                        url.searchParams.delete('lang');
+                    } else {
+                        url.searchParams.set('lang', this.currentLang);
+                    }
+                    window.history.replaceState({}, '', url.toString());
+                } catch (e) {}
+            },
+
+            updateMetaTags() {
+                const title = this.t('seoTitle');
+                const langUrl = this.currentLang === 'zh-CN'
+                    ? BASE_URL
+                    : `${BASE_URL}?lang=${this.currentLang}`;
+
+                document.title = title;
+                this.setAttr('seoTitle', 'textContent', title);
+                this.setAttr('seoDescription', 'content', this.t('seoDescription'));
+                this.setAttr('seoKeywords', 'content', this.t('seoKeywords'));
+                this.setAttr('canonicalLink', 'href', langUrl);
+                this.setAttr('ogUrl', 'content', langUrl);
+                this.setAttr('ogTitle', 'content', title);
+                this.setAttr('ogDescription', 'content', this.t('seoDescription'));
+                this.setAttr('ogLocale', 'content', this.t('ogLocale'));
+                this.setAttr('ogSiteName', 'content', this.t('ogSiteName'));
+                this.setAttr('twitterUrl', 'content', langUrl);
+                this.setAttr('twitterTitle', 'content', title);
+                this.setAttr('twitterDescription', 'content', this.t('seoDescription'));
+            },
+
+            setAttr(id, attr, value) {
+                const el = document.getElementById(id);
+                if (el) el[attr] = value;
+            },
+
+            setLanguage(lang) {
+                this.currentLang = this.normalizeLang(lang) || 'zh-CN';
+                localStorage.setItem('hub-lang', this.currentLang);
+                this.setUrlLang();
+                document.documentElement.lang = this.currentLang;
+                document.getElementById('langSelect').value = this.currentLang;
+
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    el.textContent = this.t(el.dataset.i18n);
+                });
+
+                this.updateMetaTags();
+                renderGames();
+            }
+        };
+
+        // ============ 渲染游戏卡片 ============
+        function renderGames() {
+            const lang = i18n.currentLang;
+            const grid = document.getElementById('gameGrid');
+            grid.innerHTML = '';
+
+            GAMES.forEach(game => {
+                const card = document.createElement('a');
+                card.className = 'card' + (game.soon ? ' soon' : '');
+                card.href = game.soon ? '#' : game.url;
+
+                const thumb = game.soon
+                    ? `<div class="thumb">🚧</div>`
+                    : `<div class="thumb">
+                           <img src="${game.preview}" alt="${game.name[lang]}" loading="lazy">
+                           <div class="play"><span>▶</span></div>
+                       </div>`;
+
+                const tags = (game.tags[lang] || [])
+                    .map(t => `<span>${t}</span>`).join('');
+
+                card.innerHTML = `
+                    ${thumb}
+                    <div class="info">
+                        <h2>${game.name[lang]}</h2>
+                        <p>${game.desc[lang]}</p>
+                        <div class="tags">${tags}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // ============ 初始化 ============
+        document.getElementById('langSelect').addEventListener('change', (e) => {
+            i18n.setLanguage(e.target.value);
         });
-        document.title = lang === 'zh'
-            ? '游戏大厅 - 免费在线小游戏合集'
-            : 'Game Hub - Free Online Mini Games';
-
-        const grid = document.getElementById('gameGrid');
-
-        GAMES.forEach(game => {
-            const card = document.createElement('a');
-            card.className = 'card' + (game.soon ? ' soon' : '');
-            card.href = game.soon ? '#' : game.url;
-
-            const thumb = game.soon
-                ? `<div class="thumb">🚧</div>`
-                : `<div class="thumb">
-                       <img src="${game.preview}" alt="${game.name[lang]}" loading="lazy">
-                       <div class="play"><span>▶</span></div>
-                   </div>`;
-
-            const tags = (game.tags[lang] || [])
-                .map(t => `<span>${t}</span>`).join('');
-
-            card.innerHTML = `
-                ${thumb}
-                <div class="info">
-                    <h2>${game.name[lang]}</h2>
-                    <p>${game.desc[lang]}</p>
-                    <div class="tags">${tags}</div>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
+        i18n.setLanguage(i18n.detect());
     </script>
 </body>
 </html>
