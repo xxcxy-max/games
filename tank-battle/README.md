@@ -5,7 +5,7 @@
 
 ## 在线试玩
 
-https://xxcxy-max.github.io/tank-battle/
+https://games.leonova.xyz/tank-battle/
 
 ## 本地运行
 
