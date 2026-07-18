@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>坦克大战 Tank Battle</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <canvas id="game" width="512" height="416"></canvas>
+    <div class="touch-controls" id="touchControls">
+      <div class="dpad">
+        <button class="tbtn up" data-dir="0" aria-label="上">▲</button>
+        <button class="tbtn left" data-dir="3" aria-label="左">◀</button>
+        <button class="tbtn right" data-dir="1" aria-label="右">▶</button>
+        <button class="tbtn down" data-dir="2" aria-label="下">▼</button>
+      </div>
+      <div class="actions">
+        <button class="tbtn small" id="btnPause" aria-label="暂停">II</button>
+        <button class="tbtn fire" id="btnFire" aria-label="射击">开火</button>
+      </div>
+    </div>
+    <p class="hint">方向键 / WASD 移动 · 空格 / J 射击 · P 暂停 · Enter 开始</p>
+  </div>
+  <script src="js/audio.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/entities.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #1a1a1a;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Courier New", monospace;
+}
+
+.wrap { text-align: center; }
+
+canvas {
+  width: min(92vw, 720px);
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #000;
+  border: 4px solid #444;
+  border-radius: 4px;
+}
+
+.hint {
+  color: #888;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* ===== 触屏控制(仅触屏设备显示) ===== */
+.touch-controls {
+  display: none;
+  margin-top: 14px;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+@media (pointer: coarse) {
+  .touch-controls { display: flex; }
+  .hint { display: none; }
+  canvas { touch-action: none; }
+}
+
+.dpad {
+  display: grid;
+  grid-template-areas:
+    ". up ."
+    "left . right"
+    ". down .";
+  gap: 6px;
+}
+
+.up { grid-area: up; }
+.left { grid-area: left; }
+.right { grid-area: right; }
+.down { grid-area: down; }
+
+.tbtn {
+  width: 58px;
+  height: 58px;
+  font-size: 20px;
+  font-family: inherit;
+  color: #eee;
+  background: rgba(90, 90, 90, 0.55);
+  border: 2px solid #666;
+  border-radius: 10px;
+  touch-action: none;
+}
+
+.tbtn:active { background: rgba(170, 170, 170, 0.75); }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tbtn.fire {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  font-size: 20px;
+  background: rgba(192, 56, 40, 0.65);
+  border-color: #a03020;
+}
+
+.tbtn.small {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  font-size: 16px;
+}
