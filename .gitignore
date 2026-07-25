@@ -1,3 +1,10 @@
 API_GATEWAY.md
 UI.jpg
 sbruno-simon.com.txt
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
