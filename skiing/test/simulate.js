@@ -7,9 +7,10 @@ const vm = require('vm');
 const files = ['config.js', 'logic.js', 'game.js'];
 let src = files.map(f => fs.readFileSync(path.join(__dirname, '..', 'js', f), 'utf8')).join('\n');
 src += `\nglobalThis.__x = {
-  Game, Player, Obstacle, Gate, Item, SkiWorld,
+  Game, Player, Obstacle, Gate, Item, Jump, SkiWorld,
   SLOPE_HALF_W, SPAWN_Z, MAX_SPEED, MIN_SPEED, BASE_CRUISE, STEER_SPEED,
   PLAYER_LIVES, INVINCIBLE_TIME, BOOST_TIME, GATE_SCORE, STAR_SCORE, GATE_HALF_GAP,
+  JUMP_VY, GRAVITY,
   Difficulty, circleHit,
 };`;
 
@@ -186,8 +187,50 @@ console.log('[9] 难度曲线');
   assert(X.Difficulty.spawnInterval(999999) === 0.5, '刷物间隔下限 0.5 秒');
   const kinds = new Set();
   for (let i = 0; i < 400; i++) kinds.add(X.Difficulty.pickKind(999999));
-  assert(kinds.has('tree') && kinds.has('rock') && kinds.has('gate') && kinds.has('star') && kinds.has('boost'),
-    '后期五种刷出类型都会出现');
+  assert(kinds.has('tree') && kinds.has('rock') && kinds.has('gate') && kinds.has('star') && kinds.has('boost') && kinds.has('jump'),
+    '后期六种刷出类型都会出现');
+  const early = new Set();
+  for (let i = 0; i < 400; i++) early.add(X.Difficulty.pickKind(0));
+  assert(!early.has('jump'), '开局 100m 内不刷跳台');
+}
+
+// 9.5 跳台:起跳腾空 -> 飞越障碍 -> 落地按飞行距离加分
+console.log('[9.5] 跳台');
+{
+  const game = new X.Game();
+  game.startGame();
+  game.noSpawn = true;
+  const w = game.world;
+  for (let i = 0; i < 120; i++) game.update(DT);   // 提速到巡航
+  w.entities.push(new X.Jump(w.player.x, 0));
+  game.update(DT);
+  assert(w.player.airborne === true && w.player.vy > 0, '压上跳台起跳腾空');
+  // 腾空期间撞树不掉命(直接飞越)
+  let peakY = 0;
+  for (let i = 0; i < 10 && w.player.airborne; i++) {
+    game.update(DT);
+    peakY = Math.max(peakY, w.player.y);
+  }
+  assert(peakY > 0.5, `腾空有明显高度(峰值 ${peakY.toFixed(1)} m)`);
+  const livesBefore = w.lives;
+  w.entities.push(new X.Obstacle('tree', w.player.x, 0));
+  game.update(DT);
+  assert(w.lives === livesBefore, '腾空飞越障碍不掉命');
+  // 等落地
+  const bonusBefore = w.bonus;
+  for (let i = 0; i < 300 && w.player.airborne; i++) game.update(DT);
+  assert(w.player.airborne === false && w.player.y === 0, '抛物线后落地');
+  assert(w.bonus > bonusBefore, `落地按飞行距离加分(+${w.bonus - bonusBefore})`);
+  // 已用过的跳台不会重复触发
+  const game2 = new X.Game();
+  game2.startGame();
+  game2.noSpawn = true;
+  const w2 = game2.world;
+  const j = new X.Jump(w2.player.x, 0);
+  w2.entities.push(j);
+  game2.update(DT);
+  assert(j.used === true, '跳台触发后标记已用');
+  for (let i = 0; i < 600 && w2.player.airborne; i++) game2.update(DT);
 }
 
 // 10. 暂停
@@ -211,7 +254,7 @@ console.log('[11] 随机模拟');
 {
   const game = new X.Game();
   game.startGame();
-  let restarts = 0, maxEntities = 0, maxSpeed = 0, sawGate = false, sawItem = false;
+  let restarts = 0, maxEntities = 0, maxSpeed = 0, sawGate = false, sawItem = false, sawJump = false, sawAir = false;
   for (let i = 0; i < 5000; i++) {
     game.input.steer = [-1, 0, 1][Math.floor(Math.random() * 3)];
     game.input.boost = Math.random() < 0.5;
@@ -219,9 +262,11 @@ console.log('[11] 随机模拟');
     game.update(DT);
     maxEntities = Math.max(maxEntities, game.world.entities.length);
     maxSpeed = Math.max(maxSpeed, game.world.player.speed);
+    if (game.world.player.airborne) sawAir = true;
     for (const e of game.world.entities) {
       if (e.type === 'gate') sawGate = true;
       if (e.type === 'item') sawItem = true;
+      if (e.type === 'jump') sawJump = true;
     }
     assert_speed_bounds: {
       const p = game.world.player;
@@ -239,6 +284,7 @@ console.log('[11] 随机模拟');
   }
   assert(maxEntities > 0, `障碍/道具正常刷出(最多同屏 ${maxEntities} 个)`);
   assert(sawGate && sawItem, '旗门和道具都会出现');
+  assert(sawJump, '跳台会出现');
   assert(maxSpeed > X.BASE_CRUISE, `速度随难度提升(峰值 ${maxSpeed.toFixed(1)} m/s)`);
   assert(['play', 'pause', 'gameover'].includes(game.state),
     `5000 帧随机模拟无崩溃(重开 ${restarts} 次,结束状态: ${game.state})`);

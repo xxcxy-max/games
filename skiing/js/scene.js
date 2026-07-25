@@ -26,17 +26,39 @@ class SkiScene {
     this.scene.add(sun);
     this.scene.add(new THREE.AmbientLight(0xbfd4e6, 0.75));
 
-    // ----- 起伏雪地(高度场:雪丘 + 两侧谷壁 + 向前下坡,随里程滚动) -----
+    // ----- 起伏雪地(高度场:fBm 自然起伏 + 蜿蜒谷壁 + 弯道侧倾 + 向前下坡) -----
     this.snowTex = this.makeSnowTexture();
     this.groundGeo = new THREE.PlaneGeometry(220, 320, 88, 100);
     this.groundGeo.rotateX(-Math.PI / 2);   // 顶点变为 (x, 0, z),z ∈ [-160,160]
+    // 滑道着色:道内亮白,道外偏蓝灰,一眼看出可滑区域
+    const pa = this.groundGeo.attributes.position.array;
+    const colors = new Float32Array(pa.length);
+    for (let i = 0; i < pa.length; i += 3) {
+      const t = Math.min(1, Math.max(0, (Math.abs(pa[i]) - SLOPE_HALF_W) / 3));
+      colors[i] = 1 - t * 0.12;
+      colors[i + 1] = 1 - t * 0.07;
+      colors[i + 2] = 1;
+    }
+    this.groundGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     this.ground = new THREE.Mesh(
       this.groundGeo,
-      new THREE.MeshLambertMaterial({ map: this.snowTex, color: 0xffffff })
+      new THREE.MeshLambertMaterial({ map: this.snowTex, color: 0xffffff, vertexColors: true })
     );
     this.ground.position.set(0, 0, -110);
     this.scene.add(this.ground);
     this.groundY = 0;   // 玩家脚下地面高度(平滑值,相机用)
+
+    // ----- 滑道边界标志杆(橙/蓝交替,随速度滚动循环) -----
+    this.edgePoles = [];
+    const poleGeoC = new THREE.CylinderGeometry(0.05, 0.05, 1.4, 5);
+    for (let i = 0; i < 28; i++) {
+      const side = i % 2 === 0 ? -1 : 1;
+      const color = (i >> 1) % 2 === 0 ? 0xe07a2f : 0x2a6ad2;
+      const pole = new THREE.Mesh(poleGeoC, new THREE.MeshLambertMaterial({ color }));
+      pole.position.set(side * (SLOPE_HALF_W + 0.8), 0, -156 + (i >> 1) * 12);
+      this.scene.add(pole);
+      this.edgePoles.push(pole);
+    }
 
     // ----- 远景雪山(雾里,静止) -----
     this.buildMountains();
@@ -68,16 +90,47 @@ class SkiScene {
     window.addEventListener('resize', () => this.onResize());
   }
 
+  // 确定性值噪声(格点 hash + 平滑双线性插值),fBm 叠加出自然起伏
+  hash2(ix, iz) {
+    let n = (ix * 374761393 + iz * 668265263) | 0;
+    n = Math.imul(n ^ (n >>> 13), 1274126177);
+    return ((n ^ (n >>> 16)) >>> 0) / 4294967295;
+  }
+  vnoise(x, z) {
+    const ix = Math.floor(x), iz = Math.floor(z);
+    let fx = x - ix, fz = z - iz;
+    fx = fx * fx * (3 - 2 * fx);
+    fz = fz * fz * (3 - 2 * fz);
+    const a = this.hash2(ix, iz), b = this.hash2(ix + 1, iz);
+    const c = this.hash2(ix, iz + 1), d = this.hash2(ix + 1, iz + 1);
+    return a + (b - a) * fx + (c - a) * fz + (a - b - c + d) * fx * fz;
+  }
+  fbm(x, z) {   // 3 个倍频,幅值减半 -> 大起伏上叠小细节
+    return this.vnoise(x, z) * 0.55
+         + this.vnoise(x * 2.3 + 11, z * 2.3 + 7) * 0.3
+         + this.vnoise(x * 5.1 + 23, z * 5.1 + 17) * 0.15;
+  }
+  // 雪道走向:长波蜿蜒(只作用于谷壁与侧倾,可滑区域始终居中)
+  trackCurve(wz) {
+    return 12 * Math.sin(wz * 0.011) + 7 * Math.sin(wz * 0.0043 + 1.7);
+  }
+  trackBank(wz) {   // 弯道侧倾量 ≈ 走向斜率
+    return (this.trackCurve(wz + 4) - this.trackCurve(wz - 4)) / 8;
+  }
+
   // 地形高度:wx/wz 为世界坐标(wz = 屏幕 z + 里程)
-  // = 滚动雪丘(轨道内平缓) + 两侧谷壁(出界后快速抬升) + 向前下坡
+  // = 向前下坡 + fBm 自然起伏 + 蜿蜒谷壁 + 弯道侧倾
   groundH(wx, wz) {
     const G = 0.07;   // 下坡坡度:前方(负 z)更低
     let h = G * wz;
-    h += 1.2 * Math.sin(wx * 0.15) * Math.sin(wz * 0.11)
-       + 0.6 * Math.sin(wx * 0.33 + wz * 0.29)
-       + 0.35 * Math.sin(wz * 0.51);
-    const side = Math.max(0, Math.abs(wx) - SLOPE_HALF_W - 6);
-    if (side > 0) h += side * (0.35 + 0.25 * Math.sin(wz * 0.07)) + side * side * 0.006;
+    h += (this.fbm(wx * 0.045, wz * 0.045) - 0.5) * 3.2;   // 主起伏 ±1.6m
+    h += (this.fbm(wx * 0.18 + 31, wz * 0.18) - 0.5) * 0.7; // 表面细节
+    const cx = wx - this.trackCurve(wz);
+    const side = Math.max(0, Math.abs(cx) - SLOPE_HALF_W - 6);
+    if (side > 0) {
+      h += side * (0.35 + 0.5 * this.fbm(wx * 0.03 + 5, wz * 0.06)) + side * side * 0.006;
+    }
+    h += cx * this.trackBank(wz) * 0.35;   // 弯道处雪道倾斜
     return h;
   }
 
@@ -208,6 +261,27 @@ class SkiScene {
     return g;
   }
 
+  // 跳台:雪堆 + 前倾起跳面(蓝色),压上去起跳
+  buildJump() {
+    const g = new THREE.Group();
+    const mound = new THREE.Mesh(
+      new THREE.ConeGeometry(2.6, 1.2, 4),
+      new THREE.MeshLambertMaterial({ color: 0xeef4fb })
+    );
+    mound.scale.set(1.2, 1, 1.6);
+    mound.position.y = 0.6;
+    mound.rotation.y = Math.PI / 4;
+    g.add(mound);
+    const ramp = new THREE.Mesh(
+      new THREE.BoxGeometry(3.6, 0.14, 2.8),
+      new THREE.MeshLambertMaterial({ color: 0x2a6ad2, emissive: 0x0a2a66 })
+    );
+    ramp.rotation.x = -0.34;
+    ramp.position.set(0, 0.72, -0.15);
+    g.add(ramp);
+    return g;
+  }
+
   // 积木拼的滑雪小人(随转向倾斜)
   buildSkier() {
     const g = new THREE.Group();
@@ -265,6 +339,7 @@ class SkiScene {
   buildEntityMesh(e) {
     if (e.type === 'obstacle') return e.kind === 'tree' ? this.buildTree() : this.buildRock();
     if (e.type === 'gate') return this.buildGate(e);
+    if (e.type === 'jump') return this.buildJump();
     return e.kind === 'star' ? this.buildStar() : this.buildBoost();
   }
 
@@ -287,11 +362,12 @@ class SkiScene {
     const targetY = this.groundH(p.x, dist);
     this.groundY += (targetY - this.groundY) * Math.min(1, dt * 8);
 
-    // 玩家:贴地 + 随坡度前倾 + 转向倾斜 + 无敌闪烁
+    // 玩家:贴地 + 跳台腾空高度 + 随坡度/起跳前倾 + 转向倾斜 + 无敌闪烁
     this.playerMesh.position.x = p.x;
-    this.playerMesh.position.y = targetY;
+    this.playerMesh.position.y = targetY + p.y;
     const slope = (this.groundH(p.x, dist - 2) - this.groundH(p.x, dist + 2)) / 4;
-    this.playerMesh.rotation.x = Math.atan(slope) * 0.7;
+    this.playerMesh.rotation.x = Math.atan(slope) * 0.7
+      - Math.max(-8, Math.min(8, p.vy)) * 0.045;
     this.playerMesh.rotation.z = -p.steerVis * 0.45;
     this.playerMesh.rotation.y = -p.steerVis * 0.25;
     this.playerMesh.visible = p.invincible <= 0 || Math.floor(world.time * 10) % 2 === 0;
@@ -326,17 +402,23 @@ class SkiScene {
       }
     }
 
-    // 相机追尾(横向缓动 + 贴地高度,视线落在前方坡面)
+    // 相机追尾(横向缓动 + 贴地/腾空高度;视线随雪道蜿蜒摆动,营造弯道感)
     this.camX += (p.x * 0.7 - this.camX) * Math.min(1, dt * 5);
-    this.camera.position.set(this.camX, this.groundY + 5.0, 8.0);
-    this.camera.lookAt(p.x * 0.85, this.groundH(p.x, dist - 12) + 1.0, -12);
+    this.camera.position.set(this.camX, this.groundY + 5.0 + p.y * 0.5, 8.0);
+    const sway = (this.trackCurve(dist - 70) - this.trackCurve(dist)) * 0.35;
+    this.camera.lookAt(p.x * 0.85 + sway, this.groundH(p.x, dist - 12) + 1.0, -12);
 
-    // 雪地纹理滚动 + 两侧装饰树滚动循环(贴谷壁地形)
+    // 雪地纹理滚动 + 两侧装饰树/边界标志杆滚动循环(贴地形)
     this.snowTex.offset.y = (dist / 10) % 1;
     for (const t of this.decoTrees) {
       t.position.z += p.speed * dt;
       if (t.position.z > 15) t.position.z -= 155;
       t.position.y = this.groundH(t.position.x, t.position.z + dist);
+    }
+    for (const pole of this.edgePoles) {
+      pole.position.z += p.speed * dt;
+      if (pole.position.z > 8) pole.position.z -= 168;
+      pole.position.y = this.groundH(pole.position.x, pole.position.z + dist) + 0.7;
     }
 
     // 飘雪:下落 + 被风带着向后,出界回收

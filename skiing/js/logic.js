@@ -15,6 +15,17 @@ class Player {
     this.steerVis = 0;      // 平滑后的转向量(渲染层倾斜用)
     this.invincible = 0;
     this.boostTimer = 0;
+    this.y = 0;             // 离地高度(跳台腾空)
+    this.vy = 0;
+    this.airborne = false;
+    this.airDist = 0;       // 本次腾空的水平飞行距离
+    this.justLanded = 0;    // 落地帧的飞行距离(世界层结算加分,随后清零)
+  }
+  launch() {
+    // 车速越快跳得越高
+    this.airborne = true;
+    this.vy = JUMP_VY * (0.7 + 0.6 * this.speed / MAX_SPEED);
+    this.airDist = 0;
   }
   update(dt, input, cruise) {
     // ----- 转向 -----
@@ -33,6 +44,20 @@ class Player {
       this.speed += 3 * dt;
     }
     this.speed = Math.max(MIN_SPEED, Math.min(MAX_SPEED, this.speed));
+
+    // ----- 跳台腾空:抛物线飞行,落地记飞行距离 -----
+    this.justLanded = 0;
+    if (this.airborne) {
+      this.y += this.vy * dt;
+      this.vy -= GRAVITY * dt;
+      this.airDist += this.speed * dt;
+      if (this.y <= 0) {
+        this.y = 0;
+        this.vy = 0;
+        this.airborne = false;
+        this.justLanded = this.airDist;
+      }
+    }
 
     if (this.invincible > 0) this.invincible -= dt;
   }
@@ -77,6 +102,18 @@ class Item {
   }
 }
 
+// 跳台:压上去起跳,腾空时可飞越障碍,落地按飞行距离加分
+class Jump {
+  constructor(x, z) {
+    this.id = _eid++;
+    this.type = 'jump';
+    this.x = x;
+    this.z = z;
+    this.r = 2.0;
+    this.used = false;
+  }
+}
+
 // 无尽下坡世界:推进、刷物、碰撞、计分、损命
 class SkiWorld {
   constructor() {
@@ -108,6 +145,12 @@ class SkiWorld {
     const dz = p.speed * dt;
     this.dist += dz;
 
+    // 跳台落地:按飞行距离加分
+    if (p.justLanded > 0) {
+      this.bonus += Math.round(p.justLanded);
+      this.events.push('land');
+    }
+
     // ----- 刷障碍/旗门/道具 -----
     if (!this.noSpawn && (this.spawnTimer -= dt) <= 0) {
       this.spawnTimer = Difficulty.spawnInterval(this.dist);
@@ -130,11 +173,19 @@ class SkiWorld {
         }
       }
 
-      // 障碍:撞上损 1 命(无敌期免疫)
-      if (e.type === 'obstacle' && !e.hit && p.invincible <= 0 &&
+      // 障碍:撞上损 1 命(无敌期免疫;腾空时直接飞越)
+      if (e.type === 'obstacle' && !e.hit && !p.airborne && p.invincible <= 0 &&
           Math.abs(e.z) < 1.2 && circleHit(p.x, 0, PLAYER_R, e.x, e.z, e.r)) {
         e.hit = true;
         this.crash();
+      }
+
+      // 跳台:压上去起跳(已在空中不重复触发)
+      if (e.type === 'jump' && !e.used && !p.airborne &&
+          Math.abs(e.z) < 1.5 && circleHit(p.x, 0, PLAYER_R, e.x, e.z, e.r)) {
+        e.used = true;
+        p.launch();
+        this.events.push('jump');
       }
 
       // 道具:星星加分 / 加速带提速
@@ -176,6 +227,11 @@ class SkiWorld {
     if (kind === 'gate') {
       const x = (Math.random() * 2 - 1) * (SLOPE_HALF_W - GATE_HALF_GAP - 1);
       this.entities.push(new Gate(x, SPAWN_Z));
+      return;
+    }
+    if (kind === 'jump') {
+      const x = (Math.random() * 2 - 1) * (SLOPE_HALF_W - 3);
+      this.entities.push(new Jump(x, SPAWN_Z));
       return;
     }
     if (kind === 'star' || kind === 'boost') {

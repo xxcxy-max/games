@@ -19,6 +19,9 @@ const GATE_SCORE = 50;       // 过旗门得分
 const STAR_SCORE = 100;      // 拾取星星得分
 const GATE_HALF_GAP = 2.2;   // 旗门半宽(两杆间距的一半)
 
+const JUMP_VY = 6.5;         // 跳台起跳初速度(m/s,随车速加成)
+const GRAVITY = 16;          // 空中重力加速度(m/s²)
+
 const Difficulty = {
   // 巡航速度(m/s):随里程(米)提升,10 -> 34
   cruiseSpeed(dist) {
@@ -34,10 +37,12 @@ const Difficulty = {
     const pBoost = Math.min(0.06, 0.03 + km * 0.01);
     const pStar = 0.10;
     const pGate = 0.16;
+    const pJump = dist > 100 ? 0.10 : 0;   // 100m 后开始出现跳台
     const r = Math.random();
     if (r < pBoost) return 'boost';
     if (r < pBoost + pStar) return 'star';
     if (r < pBoost + pStar + pGate) return 'gate';
+    if (r < pBoost + pStar + pGate + pJump) return 'jump';
     return Math.random() < Math.min(0.45, 0.25 + km * 0.05) ? 'rock' : 'tree';
   },
 };

@@ -55,6 +55,8 @@ class Game {
       else if (ev === 'gate') playSound('gate');
       else if (ev === 'star') playSound('star');
       else if (ev === 'boost') playSound('boost');
+      else if (ev === 'jump') playSound('jump');
+      else if (ev === 'land') playSound('land');
       else if (ev === 'gameover') this.onGameOver();
     }
     this.world.events.length = 0;

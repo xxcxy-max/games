@@ -77,6 +77,8 @@ const Sound = {
   gate() { this.beep(880, 0.08, 'triangle', 0.06); this.beep(1320, 0.12, 'triangle', 0.05, 0.08); },
   star() { this.beep(660, 0.07, 'square', 0.05); this.beep(990, 0.1, 'square', 0.05, 0.07); },
   boost() { this.noise(0.25, 0.08); this.beep(520, 0.2, 'sawtooth', 0.05); },
+  jump() { this.noise(0.3, 0.06); this.beep(330, 0.25, 'sine', 0.06); this.beep(495, 0.2, 'sine', 0.05, 0.12); },
+  land() { this.noise(0.15, 0.1); this.beep(180, 0.12, 'sine', 0.07); },
   crash() { this.noise(0.25, 0.2); this.beep(110, 0.2, 'sawtooth', 0.09); },
   gameover() { [440, 330, 220, 110].forEach((f, i) => this.beep(f, 0.25, 'triangle', 0.08, i * 0.25)); },
 };
