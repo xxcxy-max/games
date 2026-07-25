@@ -6,7 +6,7 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://games.leonova.xyz/?lang=zh-CN"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://games.leonova.xyz/?lang=en"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://games.leonova.xyz/"/>
-    <lastmod>2026-07-18</lastmod>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -47,6 +47,12 @@
   <url>
     <loc>https://games.leonova.xyz/car-battle/</loc>
     <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://games.leonova.xyz/skiing/</loc>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>滑雪大冒险 Skiing</title>
+  <meta name="description" content="3D 无尽滑雪:雪山速降躲松树岩石,穿旗门吃星星冲高分,免费在线玩。">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <div id="glwrap">
+      <div id="hud">
+        <span class="hud-left" id="hudScore">分数 0</span>
+        <span class="hud-center" id="hudHi">最高 0</span>
+        <span class="hud-right"><b id="hudSpeed">0</b> km/h</span>
+        <span class="hud-lives" id="hudLives">♥♥♥</span>
+      </div>
+      <div class="overlay" id="ovTitle">
+        <h1>滑雪大冒险</h1>
+        <p class="sub">S K I I N G</p>
+        <p>← → 转向 · ↑ 加速 · ↓ 刹车</p>
+        <p>穿旗门 +50 · 吃星星 +100 · 撞树损命</p>
+        <p class="hi" id="titleHi"></p>
+        <p class="blink">按 Enter 或点击画面开始</p>
+      </div>
+      <div class="overlay" id="ovPause">
+        <h2>已暂停</h2>
+        <p>按 P 继续</p>
+      </div>
+      <div class="overlay" id="ovOver">
+        <h2 class="danger">游戏结束</h2>
+        <p class="big" id="overScore">得分 0</p>
+        <p id="overDist">里程 0.00 km</p>
+        <p class="hi" id="overHi">最高分 0</p>
+        <p class="blink">按 Enter 或点击画面重新开始</p>
+      </div>
+      <div class="overlay" id="glError" hidden>
+        <h2 class="danger">无法启动 3D 画面</h2>
+        <p>你的浏览器不支持 WebGL,或被禁用了。</p>
+        <p>请换用最新版 Chrome / Edge / Safari 后重试。</p>
+      </div>
+    </div>
+    <div class="touch-controls" id="touchControls">
+      <span class="touch-tip">按住画面左右拖动转向</span>
+      <button class="tbtn small" id="btnPause" aria-label="暂停">II</button>
+    </div>
+    <p class="hint">← → 转向 · ↑ 加速 · ↓ 刹车 · P 暂停 · Enter 开始</p>
+    <p class="hint hint-touch">按住画面左右拖动转向 · 点按画面开始</p>
+  </div>
+  <script src="lib/three.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
